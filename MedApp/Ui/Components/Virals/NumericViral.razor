@@ -3,11 +3,11 @@
 
 <div class="d-flex flex-column gap-5">
     <Entry Title="@Title"
-           bind-Value="@AttributeNumeric.Value"/>
+           Value="@AttributeNumeric.Value"/>
 
     <Dropdown Title="@UnitTitle"
               Items="@AttributeNumeric.Units"
-              @bind-Selected="AttributeNumeric.SelectedUnit"/>
+              Selected="AttributeNumeric.SelectedUnit"/>
 </div>
 
 @code {

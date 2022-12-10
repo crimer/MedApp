@@ -30,7 +30,7 @@
             </MudPaper>
 
             <MudPaper Width="70%" Square="true" Class="flex-1">
-                @if (_patientData is null)
+                @if (_allAttributes.IsNullOrEmpty())
                 {
                     <MudPaper Width="100%" Square="true" Class="pa-5">
                         <MudText Typo="Typo.h5">Выберите секцию</MudText>
@@ -39,15 +39,10 @@
                 }
                 else
                 {
-                    @* foreach (var complaint in _patientData.Complaints) *@
-                    @* { *@
-                    @*     <Viral ViralAttribute="@complaint"/> *@
-                    @* } *@
-                    @* *@
-                    @* foreach (var instruments in _patientData.InstrumentalResearch) *@
-                    @* { *@
-                    @*     <Viral ViralAttribute="@instruments"/> *@
-                    @* } *@
+                    foreach (var attribute in _allAttributes)
+                    {
+                        <Viral ViralAttribute="attribute" />
+                    }
                 }
                 <PacientView/>
             </MudPaper>
@@ -61,7 +56,7 @@
     private bool _isLoading = false;
 
     private PatientData _patientData = null;
-    private List<ViralAttribute> _allAttributes = new();
+    private readonly List<ViralAttribute> _allAttributes = new();
 
     protected override async Task OnInitializedAsync()
     {
