@@ -1,0 +1,31 @@
+﻿@using MedApp.Models
+@using MedApp.Models.Ui
+
+<MudSelect Dense="true"
+           T="string"
+           @bind-Value="@Selected"
+           Label="@Title"
+           HelperText="@Title"
+           Clearable="true"
+           Variant="Variant.Outlined"
+           AnchorOrigin="Origin.BottomCenter">
+    @foreach (var val in Items)
+    {
+        <MudSelectItem T="string" Value="@val"/>
+    }
+</MudSelect>
+
+@code {
+
+    [Parameter]
+    public string Selected { get; set; }
+
+    [Parameter]
+    public List<string> Items { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+
+}
+

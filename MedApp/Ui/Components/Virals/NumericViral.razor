@@ -1,0 +1,24 @@
+﻿@using MedApp.Models
+@using MedApp.Models.Viral
+
+<div class="d-flex flex-column gap-5">
+    <Entry Title="@Title"
+           bind-Value="@AttributeNumeric.Value"/>
+
+    <Dropdown Title="@UnitTitle"
+              Items="@AttributeNumeric.Units"
+              @bind-Selected="AttributeNumeric.SelectedUnit"/>
+</div>
+
+@code {
+
+    [Parameter]
+    public ViralAttributeNumeric AttributeNumeric { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+    
+    [Parameter]
+    public string UnitTitle { get; set; }
+
+}

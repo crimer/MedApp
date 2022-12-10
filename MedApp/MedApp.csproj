@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="ElectronNET.API" Version="13.5.1" />
+        <PackageReference Include="FluentResults" Version="3.15.1" />
+        <PackageReference Include="MudBlazor" Version="6.1.4" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Update="electron.manifest.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Remove="Ui\Pages\Main\Components\**" />
+        <Content Remove="Ui\Pages\Views\BloatingView.razor" />
+        <Content Remove="Ui\Pages\Views\NauseaView.razor" />
+        <Content Remove="Ui\Pages\Views\PacientView.razor" />
+        <Content Remove="Ui\Pages\Views\StomachPainView.razor" />
+        <Content Remove="Ui\Pages\Views\TongueMoistureView.razor" />
+        <Content Remove="Ui\Pages\Views\VomitingView.razor" />
+    </ItemGroup>
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Ui\Pages\Home\HomePage.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Pages\Index\Index.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Shared\Components\Test\TestComponent.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Shared\NavMenu\NavigationMenu.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Shared\NavMenu\NavMenu.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Shared\AppBar\AppBar.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Pages\Main\Components\ConnectionForm.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Pages\Main\Components\SignalPlot.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Pages\Main\Components\SignalRange.razor" />
+        <_ContentIncludedByDefault Remove="Ui\Pages\Main\Components\SignalStatusBar.razor" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\OxyPlot.js" />
+        <_ContentIncludedByDefault Remove="Ui\Shared\Loader\GlobalLoader.razor" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Ui\Pages\Main\Components\**" />
+        <Compile Remove="Ui\DiagnosticResultWindow.cs" />
+        <Compile Remove="Ui\UiApp.cs" />
+        <Compile Remove="Handlers\DiagnosticViewHandler.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Remove="Ui\Pages\Main\Components\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Ui\Pages\Main\Components\**" />
+    </ItemGroup>
+</Project>

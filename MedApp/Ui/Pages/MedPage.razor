@@ -1,0 +1,128 @@
+﻿@using MedApp.Context
+@using MedApp.Extensions
+@using MedApp.Models.Viral
+@using MedApp.Ui.Dialogs
+@page "/"
+@inject MedContext MedContext
+@inject IDialogService DialogService
+@inject ISnackbar SnackbarService
+@inject PatientDataBuilder PatientDataBuilder
+
+<PageTitle>Med Iacpaas</PageTitle>
+
+<div style="height: 100%">
+    <MudContainer Fixed="true">
+        <h1 class="mb-3">Med -> Iacpaas</h1>
+
+        <div class="d-flex flex-row gap-6">
+            <MudPaper Width="30%" Square="true" Class="d-flex flex-column gap-5 pa-5">
+                <div Class="d-flex flex-row justify-space-between">
+                    <MudText Typo="Typo.h5">Секции</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
+                </div>
+
+                @foreach (var attribute in _allAttributes)
+                {
+                    <MudButton OnClick="() => OnComponentChange(attribute.AttributeName)" Variant="Variant.Filled">
+                        @(attribute.AttributeName)
+                    </MudButton>
+                }
+            </MudPaper>
+
+            <MudPaper Width="70%" Square="true" Class="flex-1">
+                @if (_patientData is null)
+                {
+                    <MudPaper Width="100%" Square="true" Class="pa-5">
+                        <MudText Typo="Typo.h5">Выберите секцию</MudText>
+                    </MudPaper>
+                    @* <DynamicComponent Type="@_selectedComponent.Value.compoent" Parameters="@_selectedComponent.Value.parameters"/> *@
+                }
+                else
+                {
+                    @* foreach (var complaint in _patientData.Complaints) *@
+                    @* { *@
+                    @*     <Viral ViralAttribute="@complaint"/> *@
+                    @* } *@
+                    @* *@
+                    @* foreach (var instruments in _patientData.InstrumentalResearch) *@
+                    @* { *@
+                    @*     <Viral ViralAttribute="@instruments"/> *@
+                    @* } *@
+                }
+                <PacientView/>
+            </MudPaper>
+        </div>
+
+    </MudContainer>
+</div>
+
+@code {
+
+    private bool _isLoading = false;
+
+    private PatientData _patientData = null;
+    private List<ViralAttribute> _allAttributes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthAsync();
+
+        _patientData = PatientDataBuilder.GetData();
+
+        _allAttributes.AddRange(_patientData.Complaints);
+        _allAttributes.AddRange(_patientData.InstrumentalResearch);
+        _allAttributes.AddRange(_patientData.PatientObjectiveCondition);
+        _allAttributes.AddRange(_patientData.BioBloodLaboratoryStudies);
+        _allAttributes.AddRange(_patientData.ClinicalBloodLaboratoryStudies);
+    }
+
+    private async Task OnCreateAsync()
+    {
+    }
+
+    private async Task AuthAsync()
+    {
+        try
+        {
+            var authResult = await MedContext.AuthorizeAsync();
+            if (authResult.IsFailed)
+            {
+                await OpenInfoDialogAsync("Авторизация", $"Ошибка авторизации: {Environment.NewLine}{authResult.Summary()}");
+            }
+            else
+            {
+                OpenSnackbar(Severity.Success, "Авторизация успешна");
+            }
+        }
+        catch (Exception ex)
+        {
+            await OpenInfoDialogAsync("Исключение", $"Исключение при обработке авторизаци: {Environment.NewLine}{ex.Message}");
+        }
+    }
+
+    private Task OpenInfoDialogAsync(string title, string text)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(InfoDialog.Text), text }
+        };
+
+        return DialogService.ShowAsync<InfoDialog>(title, parameters, new DialogOptions { CloseOnEscapeKey = true });
+    }
+
+    private void OpenSnackbar(Severity severity, string message)
+    {
+        SnackbarService.Add(message, configure: options => { }, severity: severity);
+    }
+
+    private void OnComponentChange(string key)
+    {
+    // if (string.IsNullOrWhiteSpace(key))
+    //     return;
+    //
+    // var component = _components[key];
+    //
+    // _selectedComponent = (Type.GetType($"MedApp.Ui.Pages.Views.{component.ComponentName}"), component.Parameters);
+    }
+
+}

@@ -1,0 +1,27 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager _navigationManager
+
+<MudThemeProvider/>
+<MudSnackbarProvider/>
+<MudDialogProvider />
+
+<PageTitle>404</PageTitle>
+
+<MudLayout>
+    <MudMainContent>
+        <MudText Typo="Typo.h2">404</MudText>
+        <MudText Typo="Typo.body1">Страница не найдена</MudText>
+        <MudButton 
+            Variant="Variant.Filled" 
+            StartIcon="@Icons.Material.Filled.ArrowBack" 
+            IconColor="Color.Secondary" 
+            Size="Size.Large" 
+            @onclick="ToMainPage">На главную</MudButton>
+
+    </MudMainContent>
+</MudLayout>
+
+@code
+{
+    private void ToMainPage() => _navigationManager.NavigateTo("/");
+}

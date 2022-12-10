@@ -1,0 +1,16 @@
+﻿@using MedApp.Models
+@using MedApp.Models.Viral
+
+<Dropdown Title="@Title"
+          Items="@AttributeQuality.Items"
+          @bind-Selected="AttributeQuality.SelectedItem"/>
+
+@code {
+
+    [Parameter]
+    public ViralAttributeQuality AttributeQuality { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+
+}
