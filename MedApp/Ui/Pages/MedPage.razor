@@ -16,6 +16,7 @@
 
         <div class="d-flex flex-row gap-6">
             <MudPaper Width="30%" Square="true" Class="d-flex flex-column gap-5 pa-5">
+
                 <div Class="d-flex flex-row justify-space-between">
                     <MudText Typo="Typo.h5">Секции</MudText>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
@@ -30,19 +31,15 @@
             </MudPaper>
 
             <MudPaper Width="70%" Square="true" Class="flex-1">
-                @if (_allAttributes.IsNullOrEmpty())
+                @if (_selectedComponent == null)
                 {
                     <MudPaper Width="100%" Square="true" Class="pa-5">
                         <MudText Typo="Typo.h5">Выберите секцию</MudText>
                     </MudPaper>
-                    @* <DynamicComponent Type="@_selectedComponent.Value.compoent" Parameters="@_selectedComponent.Value.parameters"/> *@
                 }
                 else
                 {
-                    foreach (var attribute in _allAttributes)
-                    {
-                        <Viral ViralAttribute="attribute" />
-                    }
+                    <Viral ViralAttribute="_selectedComponent"/>
                 }
                 <PacientView/>
             </MudPaper>
@@ -55,8 +52,10 @@
 
     private bool _isLoading = false;
 
-    private PatientData _patientData = null;
+    private PatientData _patientData;
     private readonly List<ViralAttribute> _allAttributes = new();
+
+    private ViralAttribute _selectedComponent;
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,12 +111,14 @@
 
     private void OnComponentChange(string key)
     {
-    // if (string.IsNullOrWhiteSpace(key))
-    //     return;
-    //
-    // var component = _components[key];
-    //
-    // _selectedComponent = (Type.GetType($"MedApp.Ui.Pages.Views.{component.ComponentName}"), component.Parameters);
+        if (string.IsNullOrWhiteSpace(key))
+            return;
+
+        var component = _allAttributes.FirstOrDefault(el => el.AttributeName == key);
+        if (component == null)
+            return;
+
+        _selectedComponent = component;
     }
 
 }

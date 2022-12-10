@@ -1,7 +1,9 @@
 ﻿@using MedApp.Models.Viral
 @using MedApp.Models
 
-<div>
+<MudPaper Class="pa-3">
+    <MudText Typo="Typo.h5" Class="mb-3">@ViralAttribute.AttributeName</MudText>
+
     @* @if (ViralAttribute.AttributeType == AttributeType.Complex) *@
     @* { *@
     @*     <ComplexViral Viral="@ViralAttribute"/> *@
@@ -19,7 +21,7 @@
                       AttributeNumeric="@_numericData"
                       UnitTitle="@ViralAttribute.AttributeName"/>
     }
-</div>
+</MudPaper>
 
 @code {
 
