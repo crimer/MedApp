@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace MedApp.Models.Ui;
+﻿namespace MedApp.Models.Ui;
 
 public class SectionView
 {
+    public bool IsSelected { get; set; }
     public string Name { get; }
-    public ComponentBase Component { get; }
 
-    public SectionView(string name, ComponentBase component)
+    public SectionView(bool isSelected, string name)
     {
+        IsSelected = isSelected;
         Name = name;
-        Component = component;
     }
 }

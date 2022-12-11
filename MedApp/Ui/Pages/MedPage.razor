@@ -1,5 +1,6 @@
 ﻿@using MedApp.Context
 @using MedApp.Extensions
+@using MedApp.Models.Ui
 @using MedApp.Models.Viral
 @using MedApp.Ui.Dialogs
 @page "/"
@@ -14,7 +15,7 @@
     <MudText Typo="Typo.h3">Med -> Iacpaas</MudText>
 
     <div class="d-flex flex-row gap-6 flex-1">
-        <MudPaper Width="30%" Height="75%" Square="true" Class="d-flex flex-column pa-5">
+        <MudPaper Width="30%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
 
             <div Class="d-flex flex-row justify-space-between">
                 <MudText Typo="Typo.h5">Секции</MudText>
@@ -22,25 +23,32 @@
             </div>
 
             <div class="flex-1 overflow-scroll">
-                @foreach (var attribute in _allAttributes)
+                @foreach (var section in _sections)
                 {
-                    <MudCheckBox  Checked="true"
-                                 Label="@(attribute.AttributeName)" 
+                    <MudCheckBox Checked="@(section.IsSelected)"
+                                 T="bool"
+                                 CheckedChanged="(v) => SectionCheckedChange(section)"
+                                 Label="@(section.Name)"
                                  Color="Color.Primary"/>
                 }
             </div>
         </MudPaper>
 
-        <MudPaper Width="70%" Square="true" Class="flex-1">
-            @if (_selectedComponent == null)
+        <MudPaper Width="70%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
+            @if (_selectedComponents.IsNullOrEmpty())
             {
                 <MudPaper Width="100%" Square="true" Class="pa-5">
-                    <MudText Typo="Typo.h5">Выберите секцию</MudText>
+                    <MudText Typo="Typo.h5">Выберите секции</MudText>
                 </MudPaper>
             }
             else
             {
-                <Viral ViralAttribute="_selectedComponent"/>
+                <div class="flex-1 overflow-scroll">
+                    @foreach (var variableComponent in _selectedComponents)
+                    {
+                        <Viral ViralAttribute="@variableComponent"/>
+                    }
+                </div>
             }
             <PacientView/>
         </MudPaper>
@@ -52,9 +60,9 @@
     private bool _isLoading = false;
 
     private PatientData _patientData;
+    private readonly List<SectionView> _sections = new();
+    private readonly List<ViralAttribute> _selectedComponents = new();
     private readonly List<ViralAttribute> _allAttributes = new();
-
-    private ViralAttribute _selectedComponent;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,10 +75,15 @@
         _allAttributes.AddRange(_patientData.PatientObjectiveCondition);
         _allAttributes.AddRange(_patientData.BioBloodLaboratoryStudies);
         _allAttributes.AddRange(_patientData.ClinicalBloodLaboratoryStudies);
+
+        _sections.AddRange(_allAttributes
+            .Select(s => new SectionView(false, s.AttributeName))
+            .ToList());
     }
 
     private async Task OnCreateAsync()
     {
+        var r = _sections.Where(el => el.IsSelected);
     }
 
     private async Task AuthAsync()
@@ -116,8 +129,16 @@
         var component = _allAttributes.FirstOrDefault(el => el.AttributeName == key);
         if (component == null)
             return;
+    }
 
-        _selectedComponent = component;
+    private void SectionCheckedChange(SectionView sectionView)
+    {
+        sectionView.IsSelected = !sectionView.IsSelected;
+
+        if (sectionView.IsSelected)
+            _selectedComponents.Add(_allAttributes.First(el => el.AttributeName == sectionView.Name));
+        else
+            _selectedComponents.Remove(_allAttributes.First(el => el.AttributeName == sectionView.Name));
     }
 
 }
