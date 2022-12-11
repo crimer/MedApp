@@ -1,12 +1,12 @@
 ﻿
 <MudTextField @bind-Value="@Value" 
               Label="@Title" 
-              T="double"
+              T="string"
               Variant="Variant.Outlined"/>
 
 @code {
     [Parameter]
-    public double Value { get; set; }
+    public string Value { get; set; }
 
     [Parameter]
     public string Title { get; set; }

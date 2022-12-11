@@ -85,14 +85,12 @@ public class ViralAttributeQuality
 /// </summary>
 public class ViralAttributeNumeric
 {
-    public string SelectedUnit { get; set; }
-    public List<string> Units { get; set; }
+    public string Unit { get; set; }
     public double Value { get; set; } = 0;
 
-    public ViralAttributeNumeric(List<string> units,  double value)
+    public ViralAttributeNumeric(string unit,  double value)
     {
-        SelectedUnit = string.Empty;
-        Units = units;
+        Unit = unit;
         Value = value;
     }
 }
@@ -123,28 +121,38 @@ public class PresentDiseaseHistory
     public List<string> SelfTreatmentFact { get; set; }
 }
 
-public class PatientData
+public class Pacient
 {
     /// <summary>
     /// Пол
     /// </summary>
-    public string Sex { get; private set; }
+    public string SelectedSex { get; set; }
         
     /// <summary>
     /// Единица измерения возраста (год, месяц, неделя, день)
     /// </summary>
-    public string YearUnit { get; private set; }
+    public string SelectedAgeUnit { get; set; }
         
     /// <summary>
     /// Возраст
     /// </summary>
-    public int YearValue { get; private set; }
+    public int AgeValue { get; set; }
         
     /// <summary>
     /// Национальность
     /// </summary>
-    public string Nationality { get; private set; }
-        
+    public string Nationality { get; set; }
+    
+    
+    public List<string> SexValues = new();
+
+    public List<string> AgeValues = new();
+}
+
+public class PatientData
+{
+    public Pacient Pacient { get; set; }
+    
     /// <summary>
     /// Жалобы
     /// </summary>
@@ -175,13 +183,4 @@ public class PatientData
     /// </summary>
     public PresentDiseaseHistory PresentDiseaseHistory { get; set; }
 
-    public static PatientData Curren;
-
-    public PatientData() { }
-
-    public static PatientData Set(PatientData patientData)
-    {
-        Curren = patientData;
-        return Curren;
-    }
 }

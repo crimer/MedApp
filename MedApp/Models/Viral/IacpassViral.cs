@@ -6,6 +6,7 @@ public class PatientDataBuilder
     {
         return new PatientData()
         {
+            Pacient = GetPacient(),
             // Построение списка жалоб
             Complaints = GetComplaints(),
             // Построение объективное состояние больного
@@ -18,6 +19,26 @@ public class PatientDataBuilder
             InstrumentalResearch = GetInstrumentalResearch(),
             // История настоящего заболевания
             PresentDiseaseHistory = GetPresentDiseaseHistory()
+        };
+    }
+
+    private Pacient GetPacient()
+    {
+        var sex = new List<string>()
+        {
+            "мужской", "женский"
+        };
+        var age = new List<string>()
+        {
+            "год", "месяц", "неделя", "день"
+        };
+        return new Pacient()
+        {
+            AgeValue = 20,
+            SexValues = sex,
+            AgeValues = age,
+            SelectedSex = sex[0],
+            SelectedAgeUnit = age[0]
         };
     }
 
@@ -68,10 +89,7 @@ public class PatientDataBuilder
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Толщина стенки желчного пузыря (УЗИ желчного пузыря)",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "мм"
-                }, 2.2)
+                AttributeData = new ViralAttributeNumeric("мм", 2.2)
             },
             new()
             {
@@ -105,37 +123,25 @@ public class PatientDataBuilder
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Белок общий в сыворотке",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "г/л"
-                }, 57.2)
+                AttributeData = new ViralAttributeNumeric("г/л", 57.2)
             },
             new()
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Билирубин общий",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "мкмоль/л"
-                }, 7.7)
+                AttributeData = new ViralAttributeNumeric("мкмоль/л", 7.7)
             },
             new()
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Фосфатаза щелочная",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "Ед/л"
-                }, 600.0)
+                AttributeData = new ViralAttributeNumeric("Ед/л", 600.0)
             },
             new()
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "СОЭ",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "мм/ч"
-                }, 22.0)
+                AttributeData = new ViralAttributeNumeric("мм/ч", 22.0)
             },
         };
     }
@@ -151,37 +157,25 @@ public class PatientDataBuilder
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Гематокрит",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "%"
-                }, 43.2)
+                AttributeData = new ViralAttributeNumeric("%", 43.2)
             },
             new()
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Гемоглобин",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "г/л"
-                }, 43.2)
+                AttributeData = new ViralAttributeNumeric("г/л", 43.2)
             },
             new()
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "Лейкоциты в крови",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "10⁹/л"
-                }, 9.9)
+                AttributeData = new ViralAttributeNumeric("10⁹/л", 9.9)
             },
             new()
             {
                 AttributeType = AttributeType.Numeric,
                 AttributeName = "СОЭ",
-                AttributeData = new ViralAttributeNumeric(new List<string>()
-                {
-                    "мм/ч"
-                }, 22.0)
+                AttributeData = new ViralAttributeNumeric("мм/ч", 22.0)
             },
         };
     }
@@ -276,10 +270,7 @@ public class PatientDataBuilder
                         {
                             Name = "Значение",
                             Type = AttributeType.Numeric,
-                            Data = new ViralAttributeNumeric(new List<string>()
-                            {
-                                "С"
-                            }, 35)
+                            Data = new ViralAttributeNumeric( "С", 35)
                         },
                     }
                 }

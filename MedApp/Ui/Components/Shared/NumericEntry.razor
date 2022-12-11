@@ -1,12 +1,11 @@
 ﻿<MudNumericField @bind-Value="@Value" 
                  Label="@Title" 
-                 T="decimal"
-                 Variant="Variant.Outlined" 
-                 Step=".2M" />
+                 T="double"
+                 Variant="Variant.Outlined"/>
 
 @code {
     [Parameter]
-    public decimal Value { get; set; }
+    public double Value { get; set; }
 
     [Parameter]
     public string Title { get; set; }

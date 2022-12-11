@@ -108,15 +108,15 @@ public class IacpaasDataConverter
                     {
                         new DataSuccessor()
                         {
-                            Meta = patientData.YearUnit,
-                            Value = patientData.YearUnit,
+                            // Meta = patientData.YearUnit,
+                            // Value = patientData.YearUnit,
                             Type = DataSuccessor.TerminalValue,
                             ValueType = DataSuccessor.Str
                         },
                         new DataSuccessor()
                         {
                             Meta = "значение",
-                            Value = patientData.YearValue,
+                            // Value = patientData.YearValue,
                             Type = DataSuccessor.TerminalValue,
                             ValueType = DataSuccessor.Integer
                         }
@@ -131,8 +131,8 @@ public class IacpaasDataConverter
                     {
                         new DataSuccessor()
                         {
-                            Meta = patientData.Sex,
-                            Value = patientData.Sex,
+                            // Meta = patientData.Sex,
+                            // Value = patientData.Sex,
                             Type = DataSuccessor.TerminalValue,
                             ValueType = DataSuccessor.Str
                         }
@@ -140,7 +140,7 @@ public class IacpaasDataConverter
                 },
                 new DataSuccessor()
                 {
-                    Value = patientData.Nationality,
+                    // Value = patientData.Nationality,
                     ValueType = DataSuccessor.Str,
                     Meta = "национальность",
                     Type = DataSuccessor.TerminalValue,

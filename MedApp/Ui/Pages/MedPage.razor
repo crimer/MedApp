@@ -19,6 +19,7 @@
 
             <div Class="d-flex flex-row justify-space-between">
                 <MudText Typo="Typo.h5">Секции</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="OnClear">Отчистить</MudButton>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
             </div>
 
@@ -27,7 +28,7 @@
                 {
                     <MudCheckBox Checked="@(section.IsSelected)"
                                  T="bool"
-                                 CheckedChanged="(v) => SectionCheckedChange(section)"
+                                 CheckedChanged="(_) => SectionCheckedChange(section)"
                                  Label="@(section.Name)"
                                  Color="Color.Primary"/>
                 }
@@ -35,13 +36,12 @@
         </MudPaper>
 
         <MudPaper Width="70%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
-            @if (_selectedComponents.IsNullOrEmpty())
+            @if (_patientData is not null && _patientData.Pacient is not null)
             {
-                <MudPaper Width="100%" Square="true" Class="pa-5">
-                    <MudText Typo="Typo.h5">Выберите секции</MudText>
-                </MudPaper>
+                <PacientDataView Pacient="_patientData.Pacient"/>
             }
-            else
+
+            @if (!_selectedComponents.IsNullOrEmpty())
             {
                 <div class="flex-1 overflow-scroll">
                     @foreach (var variableComponent in _selectedComponents)
@@ -64,10 +64,8 @@
     private readonly List<ViralAttribute> _selectedComponents = new();
     private readonly List<ViralAttribute> _allAttributes = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnParametersSet()
     {
-        await AuthAsync();
-
         _patientData = PatientDataBuilder.GetData();
 
         _allAttributes.AddRange(_patientData.Complaints);
@@ -79,6 +77,13 @@
         _sections.AddRange(_allAttributes
             .Select(s => new SectionView(false, s.AttributeName))
             .ToList());
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthAsync();
+
+        
     }
 
     private async Task OnCreateAsync()
@@ -118,17 +123,7 @@
 
     private void OpenSnackbar(Severity severity, string message)
     {
-        SnackbarService.Add(message, configure: options => { }, severity: severity);
-    }
-
-    private void OnComponentChange(string key)
-    {
-        if (string.IsNullOrWhiteSpace(key))
-            return;
-
-        var component = _allAttributes.FirstOrDefault(el => el.AttributeName == key);
-        if (component == null)
-            return;
+        SnackbarService.Add(message, severity: severity);
     }
 
     private void SectionCheckedChange(SectionView sectionView)
@@ -139,6 +134,12 @@
             _selectedComponents.Add(_allAttributes.First(el => el.AttributeName == sectionView.Name));
         else
             _selectedComponents.Remove(_allAttributes.First(el => el.AttributeName == sectionView.Name));
+    }
+
+    private void OnClear()
+    {
+        _sections.ForEach(s => s.IsSelected = false);
+        _selectedComponents.Clear();
     }
 
 }

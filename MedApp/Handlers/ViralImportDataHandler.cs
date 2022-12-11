@@ -12,7 +12,7 @@ namespace MedApp.Handlers;
 
 public class ViralImportDataHandler
 {
-    public async Task<Result<string>> ImportAsync()
+    public async Task<Result<string>> ImportAsync(PatientData patientData)
     {
         // Logger.Info("Начат процесс создания ИБ на платформе IACPaaS");
             
@@ -25,7 +25,7 @@ public class ViralImportDataHandler
         }
 
         var medDataRoot = medArchive.Value.Data;
-        var newIb = CreateViralHistory(PatientData.Curren);
+        var newIb = CreateViralHistory(patientData);
             
         medDataRoot.Successors.Clear();
         medDataRoot.Successors.Add(newIb);

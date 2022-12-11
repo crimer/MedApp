@@ -1,0 +1,19 @@
+﻿@using MedApp.Models.Viral
+<div class="d-flex gap-5 align-center">
+    <MudText Typo="Typo.h5">Пациент</MudText>
+
+    <Entry Title="Национальность" Value="@Pacient.Nationality"/>
+
+    <Dropdown Title="Пол" Items="@Pacient.SexValues" Selected="@Pacient.SelectedSex"/>
+
+    <NumericEntry Title="Возраст" Value="@Pacient.AgeValue"/>
+
+    <Dropdown Title="Возраст" Items="@Pacient.AgeValues" Selected="@Pacient.SelectedAgeUnit"/>
+</div>
+
+@code {
+
+    [Parameter]
+    public Pacient Pacient { get; set; }
+
+}

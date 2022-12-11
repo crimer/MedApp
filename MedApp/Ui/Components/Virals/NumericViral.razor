@@ -2,12 +2,8 @@
 @using MedApp.Models.Viral
 
 <div class="d-flex flex-column gap-5">
-    <Entry Title="@Title"
+    <NumericEntry Title="@(Title + " " + AttributeNumeric.Unit)"
            Value="@AttributeNumeric.Value"/>
-
-    <Dropdown Title="@UnitTitle"
-              Items="@AttributeNumeric.Units"
-              Selected="@AttributeNumeric.SelectedUnit"/>
 </div>
 
 @code {
