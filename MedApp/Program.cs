@@ -38,7 +38,19 @@ builder.Services.AddSingleton<MedContext>();
 builder.WebHost.UseElectron(args);
 builder.WebHost.UseEnvironment(builder.Environment.EnvironmentName);
 
-Task.Run(CreateWindowAsync);
+Task.Run(async () =>
+{
+    var browserWindow = await Electron.WindowManager.CreateBrowserViewAsync();
+    await browserWindow.WebContents.Session.ClearCacheAsync();
+});
+
+Task.Run(async () =>
+{
+    var browserWindow = await Electron.WindowManager.CreateWindowAsync();
+    await browserWindow.WebContents.Session.ClearCacheAsync();
+    browserWindow.OnReadyToShow += () => browserWindow.Show();  
+    browserWindow.OnClosed += () => Electron.App.Quit();
+});
 
 var app = builder.Build();
 
@@ -51,13 +63,7 @@ app.MapFallbackToPage("/_Host");
 
 app.Run();
 
-async Task CreateWindowAsync()  
-{  
-    var browserWindow = await Electron.WindowManager.CreateWindowAsync();
-    await browserWindow.WebContents.Session.ClearCacheAsync();
-    browserWindow.OnReadyToShow += () => browserWindow.Show();  
-    browserWindow.OnClosed += () => Electron.App.Quit();
-}
+
 
 void SetLocale(CultureInfo ci)
 {

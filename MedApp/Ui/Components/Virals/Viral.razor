@@ -4,10 +4,10 @@
 <MudPaper Class="pa-3">
     <MudText Typo="Typo.h5" Class="mb-3">@ViralAttribute.AttributeName</MudText>
 
-    @* @if (ViralAttribute.AttributeType == AttributeType.Complex) *@
-    @* { *@
-    @*     <ComplexViral Viral="@ViralAttribute"/> *@
-    @* } *@
+    @if (ViralAttribute.AttributeType == AttributeType.Complex && _complexData is not null)
+    {
+        <ComplexViral AttributeComplex="@_complexData"/>
+    }
 
     @if (ViralAttribute.AttributeType == AttributeType.Quality && _quantityData is not null)
     {
@@ -32,7 +32,7 @@
     private ViralAttributeQuality? _quantityData;
     private ViralAttributeComplex? _complexData;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         if (ViralAttribute.AttributeType == AttributeType.Numeric)
             _numericData = ViralAttribute.AttributeData as ViralAttributeNumeric;
@@ -40,7 +40,7 @@
         if (ViralAttribute.AttributeType == AttributeType.Quality)
             _quantityData = ViralAttribute.AttributeData as ViralAttributeQuality;
 
-        if (ViralAttribute.AttributeType == AttributeType.Quality)
+        if (ViralAttribute.AttributeType == AttributeType.Complex)
             _complexData = ViralAttribute.AttributeData as ViralAttributeComplex;
     }
 

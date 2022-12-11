@@ -47,4 +47,7 @@
     <ItemGroup>
         <None Remove="Ui\Pages\Main\Components\**" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="wwwroot" />
+    </ItemGroup>
 </Project>

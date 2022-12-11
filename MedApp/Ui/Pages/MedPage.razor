@@ -10,43 +10,42 @@
 
 <PageTitle>Med Iacpaas</PageTitle>
 
-<div style="height: 100%">
-    <MudContainer Fixed="true">
-        <h1 class="mb-3">Med -> Iacpaas</h1>
+<MudContainer Fixed="true" Style="height: 100%" Class="d-flex flex-column gap-3 overflow-hidden">
+    <MudText Typo="Typo.h3">Med -> Iacpaas</MudText>
 
-        <div class="d-flex flex-row gap-6">
-            <MudPaper Width="30%" Square="true" Class="d-flex flex-column gap-5 pa-5">
+    <div class="d-flex flex-row gap-6 flex-1">
+        <MudPaper Width="30%" Height="75%" Square="true" Class="d-flex flex-column pa-5">
 
-                <div Class="d-flex flex-row justify-space-between">
-                    <MudText Typo="Typo.h5">Секции</MudText>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
-                </div>
+            <div Class="d-flex flex-row justify-space-between">
+                <MudText Typo="Typo.h5">Секции</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
+            </div>
 
+            <div class="flex-1 overflow-scroll">
                 @foreach (var attribute in _allAttributes)
                 {
-                    <MudButton OnClick="() => OnComponentChange(attribute.AttributeName)" Variant="Variant.Filled">
-                        @(attribute.AttributeName)
-                    </MudButton>
+                    <MudCheckBox  Checked="true"
+                                 Label="@(attribute.AttributeName)" 
+                                 Color="Color.Primary"/>
                 }
-            </MudPaper>
+            </div>
+        </MudPaper>
 
-            <MudPaper Width="70%" Square="true" Class="flex-1">
-                @if (_selectedComponent == null)
-                {
-                    <MudPaper Width="100%" Square="true" Class="pa-5">
-                        <MudText Typo="Typo.h5">Выберите секцию</MudText>
-                    </MudPaper>
-                }
-                else
-                {
-                    <Viral ViralAttribute="_selectedComponent"/>
-                }
-                <PacientView/>
-            </MudPaper>
-        </div>
-
-    </MudContainer>
-</div>
+        <MudPaper Width="70%" Square="true" Class="flex-1">
+            @if (_selectedComponent == null)
+            {
+                <MudPaper Width="100%" Square="true" Class="pa-5">
+                    <MudText Typo="Typo.h5">Выберите секцию</MudText>
+                </MudPaper>
+            }
+            else
+            {
+                <Viral ViralAttribute="_selectedComponent"/>
+            }
+            <PacientView/>
+        </MudPaper>
+    </div>
+</MudContainer>
 
 @code {
 

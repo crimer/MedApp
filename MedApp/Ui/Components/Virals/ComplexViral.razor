@@ -1,5 +1,15 @@
-﻿<h3>ComplexViral</h3>
+﻿@using MedApp.Models.Viral
+
+<div class="d-flex flex-column gap-5">
+    @foreach (var characteristic in AttributeComplex.Characteristics)
+    {
+        <ComplexCharacteristic Characteristic="@characteristic"/>
+    }
+    
+</div>
 
 @code {
-    
+    [Parameter]
+    public ViralAttributeComplex AttributeComplex { get; set; }
+
 }

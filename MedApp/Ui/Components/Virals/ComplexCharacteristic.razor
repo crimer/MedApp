@@ -1,0 +1,37 @@
+﻿@using MedApp.Models.Viral
+<div>
+    @if (Characteristic.Type == AttributeType.Quality && _quantityData is not null)
+    {
+        <QualityViral Title="@Characteristic.Name"
+                      AttributeQuality="@_quantityData"/>
+    }
+
+    @if (Characteristic.Type == AttributeType.Numeric && _numericData is not null)
+    {
+        <NumericViral Title="@Characteristic.Name"
+                      AttributeNumeric="@_numericData"
+                      UnitTitle="Ед. изм."/>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public MedApp.Models.Viral.ComplexCharacteristic Characteristic { get; set; }
+
+    private ViralAttributeNumeric? _numericData;
+    private ViralAttributeQuality? _quantityData;
+
+    protected override void OnParametersSet()
+    {
+        if (Characteristic.Type == AttributeType.Numeric)
+            _numericData = Characteristic.Data as ViralAttributeNumeric;
+
+        if (Characteristic.Type == AttributeType.Quality)
+            _quantityData = Characteristic.Data as ViralAttributeQuality;
+
+
+        StateHasChanged();
+    }
+
+}
