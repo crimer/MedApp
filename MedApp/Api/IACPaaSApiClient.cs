@@ -16,14 +16,15 @@ public class IACPaaSApiClient
     /// Синглтон
     /// </summary>
     public static IACPaaSApiClient Instance { get; } = new();
-    private const string DiagnosisWithoutUiServiceId = "4640197744801057262";
+
+    private const string DiagnosisWithoutUiServiceId = "4640284589039782382";
 
     private IACPaaSApiClient() { }
 
     /// <summary>
     /// Запуск сервиса
     /// </summary>
-    public async Task<Result<IacpaasResponseDto>> RunServiceAsync()
+    public async Task<Result<IacpaasResponseDto>> RunDiagnosticServiceAsync()
     {
         try
         {
@@ -44,7 +45,7 @@ public class IACPaaSApiClient
     /// <summary>
     /// Выяснение статуса работы сервиса
     /// </summary>
-    public async Task<Result<CheckServiceRunningDto>> IsServiceRunningAsync()
+    public async Task<Result<CheckServiceRunningDto>> IsDiagnosticServiceRunningAsync()
     {
         try
         {
