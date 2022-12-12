@@ -1,5 +1,7 @@
 ﻿using FluentResults;
 using MedApp.Handlers;
+using MedApp.Models.Iacpaas;
+using MedApp.Models.Viral;
 
 namespace MedApp.Context;
 
@@ -9,53 +11,46 @@ public class MedContext
     private readonly IACPaaSLoadDataHandler _iacPaaSLoadDataHandler;
     private readonly ViralImportDataHandler _viralImportDataHandler;
     private readonly RunDiagnosticServiceHandler _runDiagnosticServiceHandler;
+    private readonly PrepareSuccessorHandler _prepareSuccessorHandler;
 
 
     public MedContext(
         AuthHandler authHandler,
         IACPaaSLoadDataHandler iacPaaSLoadDataHandler,
         ViralImportDataHandler viralImportDataHandler,
-        RunDiagnosticServiceHandler runDiagnosticServiceHandler)
+        RunDiagnosticServiceHandler runDiagnosticServiceHandler,
+        PrepareSuccessorHandler prepareSuccessorHandler)
     {
         _authHandler = authHandler;
         _iacPaaSLoadDataHandler = iacPaaSLoadDataHandler;
         _viralImportDataHandler = viralImportDataHandler;
         _runDiagnosticServiceHandler = runDiagnosticServiceHandler;
+        _prepareSuccessorHandler = prepareSuccessorHandler;
     }
-    
-    public async Task HandleAsync(CancellationToken token)
-    {
-        // var runResult = await _runDiagnosticServiceHandler.RunAsync(importResult.Value);
-        // if (runResult.IsFailed)
-        //     return;
 
-        var data = await _iacPaaSLoadDataHandler.GetDataAsync(token);
-        if (data.IsFailed)
-            return;
-
-        // diagnosticResultHandler.Vizualize(data.Value);
-
-    }
-    
-    public async Task GetIacpaasDataAsync()
+    public async Task<Result<DataSuccessor>> ImportDataAsync(PatientData patientData)
     {
         try
         {
-            // AnsiConsole.WriteLine();
+            var viral = _prepareSuccessorHandler.CreateViralHistory(patientData);
 
-            // var importResult = await _iacPaaSLoadDataHandler.GetDataAsync();
-            // if (importResult.IsFailed)
-            //     return;
-        }
-        catch (OperationCanceledException)
-        {
-            while (true)
-                Console.ReadKey(true);
+            var importResult = await _viralImportDataHandler.ImportAsync(viral);
+            if (importResult.IsFailed)
+                return importResult.ToResult();
+
+            var runResult = await _runDiagnosticServiceHandler.RunAsync(importResult.Value);
+            if (runResult.IsFailed)
+                return runResult;
+
+            var data = await _iacPaaSLoadDataHandler.GetDataAsync();
+            if (data.IsFailed)
+                return data.ToResult();
+
+            return data;
         }
         catch (Exception ex)
         {
-            while (true)
-                Console.ReadKey(true);
+            return Result.Fail($"Исключение во время обработки импорта данных и запуска диагностики, {ex.Message}");
         }
     }
 

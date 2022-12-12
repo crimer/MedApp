@@ -1,30 +1,26 @@
 ﻿using System.Globalization;
-using MedApp.Models;
 using MedApp.Models.Iacpaas;
 using MedApp.Models.Viral;
-using Newtonsoft.Json;
 
 namespace MedApp.Utils;
 
 public class IacpaasDataConverter
 {
-    public static List<DataSuccessor> GetAttributes(List<ViralAttribute> viralAttributes) 
+    public static List<DataSuccessor> GetAttributes(List<ViralAttribute> viralAttributes)
         => viralAttributes.Select(GetAttribute).ToList();
 
-    public static DataSuccessor GetAttribute(ViralAttribute viralAttribute)
-    {
-        switch (viralAttribute.AttributeType)
+    private static DataSuccessor GetAttribute(ViralAttribute viralAttribute) =>
+        viralAttribute.AttributeType switch
         {
-            case AttributeType.Numeric: return GetNumericAttribute(viralAttribute);
-            case AttributeType.Quality: return GetQualityAttribute(viralAttribute);
-            case AttributeType.Complex: return GetComplexAttribute(viralAttribute);
-        }
-        return null;
-    }
+            AttributeType.Numeric => GetNumericAttribute(viralAttribute),
+            AttributeType.Quality => GetQualityAttribute(viralAttribute),
+            AttributeType.Complex => GetComplexAttribute(viralAttribute),
+            _ => throw new ArgumentOutOfRangeException("Не реализованный тип признака")
+        };
 
     private static DataSuccessor GetComplexAttribute(ViralAttribute viralAttribute)
     {
-        var viralAttributeComplex = JsonConvert.DeserializeObject<ViralAttributeComplex>(viralAttribute.AttributeData.ToString());
+        var viralAttributeComplex = viralAttribute.AttributeData as ViralAttributeComplex;
         var characteristics = GetCharacteristics(viralAttributeComplex);
         return new DataSuccessor()
         {
@@ -44,23 +40,17 @@ public class IacpaasDataConverter
         };
     }
 
-    private static List<DataSuccessor> GetCharacteristics(ViralAttributeComplex viralAttributeComplex) 
+    private static List<DataSuccessor> GetCharacteristics(ViralAttributeComplex viralAttributeComplex)
         => viralAttributeComplex.Characteristics.Select(s =>
         {
             DataSuccessor dataSuccessor = null;
 
             if (s.Type == AttributeType.Numeric)
-            {
-                var attributeNumeric = JsonConvert.DeserializeObject<ViralAttributeNumeric>(s.Data.ToString());
-                dataSuccessor = GetNumeric(attributeNumeric);
-            }
-                
+                dataSuccessor = GetNumeric(s.Data as ViralAttributeNumeric);
+
             if (s.Type == AttributeType.Quality)
-            {
-                var attributeQuality = JsonConvert.DeserializeObject<ViralAttributeQuality>(s.Data.ToString());
-                dataSuccessor = GetQuality(attributeQuality);
-            }
-                
+                dataSuccessor = GetQuality(s.Data as ViralAttributeQuality);
+
             return new DataSuccessor()
             {
                 Type = DataSuccessor.NoneTerminal,
@@ -89,58 +79,58 @@ public class IacpaasDataConverter
         ValueType = DataSuccessor.Date,
         Value = DateTime.Now.ToString("dd.MM.yyyy-HH:mm:ss", CultureInfo.CurrentCulture)
     };
-        
-    public static DataSuccessor GetPassportPath(PatientData patientData)
+
+    public static DataSuccessor GetPassportPath(Pacient pacient)
     {
         return new DataSuccessor()
         {
-            Meta = "Паспортная часть",
             Type = DataSuccessor.NoneTerminal,
+            Meta = "Паспортная часть",
             Name = "Паспортная часть",
             Successors = new List<DataSuccessor>()
             {
-                new DataSuccessor()
+                new()
                 {
                     Name = "Возраст",
                     Meta = "Возраст",
                     Type = DataSuccessor.NoneTerminal,
                     Successors = new List<DataSuccessor>()
                     {
-                        new DataSuccessor()
+                        new()
                         {
-                            // Meta = patientData.YearUnit,
-                            // Value = patientData.YearUnit,
+                            Meta = pacient.SelectedAgeUnit,
+                            Value = pacient.SelectedAgeUnit,
                             Type = DataSuccessor.TerminalValue,
                             ValueType = DataSuccessor.Str
                         },
-                        new DataSuccessor()
+                        new()
                         {
                             Meta = "значение",
-                            // Value = patientData.YearValue,
+                            Value = pacient.AgeValue,
                             Type = DataSuccessor.TerminalValue,
                             ValueType = DataSuccessor.Integer
                         }
                     }
                 },
-                new DataSuccessor()
+                new()
                 {
                     Name = "Пол",
                     Meta = "Пол",
                     Type = DataSuccessor.NoneTerminal,
                     Successors = new List<DataSuccessor>()
                     {
-                        new DataSuccessor()
+                        new()
                         {
-                            // Meta = patientData.Sex,
-                            // Value = patientData.Sex,
+                            Meta = pacient.SelectedSex,
+                            Value = pacient.SelectedSex,
                             Type = DataSuccessor.TerminalValue,
                             ValueType = DataSuccessor.Str
                         }
                     }
                 },
-                new DataSuccessor()
+                new()
                 {
-                    // Value = patientData.Nationality,
+                    Value = pacient.Nationality,
                     ValueType = DataSuccessor.Str,
                     Meta = "национальность",
                     Type = DataSuccessor.TerminalValue,
@@ -151,7 +141,7 @@ public class IacpaasDataConverter
 
     private static DataSuccessor GetQualityAttribute(ViralAttribute viralAttribute)
     {
-        var viralAttributeQuality = JsonConvert.DeserializeObject<ViralAttributeQuality>(viralAttribute.AttributeData.ToString());
+        var viralAttributeQuality = viralAttribute.AttributeData as ViralAttributeQuality;
         return new DataSuccessor()
         {
             Meta = "Признак",
@@ -166,26 +156,26 @@ public class IacpaasDataConverter
 
     private static DataSuccessor GetQuality(ViralAttributeQuality data)
     {
-        // var elements = data.Values.Select(s => new DataSuccessor()
-        // {
-        //     Type = DataSuccessor.TerminalValue,
-        //     ValueType = DataSuccessor.Str,
-        //     Meta = "значение",
-        //     Value = s
-        // }).ToList();
-            
+        var element = new DataSuccessor()
+        {
+            Type = DataSuccessor.TerminalValue,
+            ValueType = DataSuccessor.Str,
+            Meta = "значение",
+            Value = data.SelectedItem
+        };
+
         return new DataSuccessor()
         {
             Name = "Качественные значения",
             Meta = "Качественные значения",
             Type = DataSuccessor.NoneTerminal,
-            // Successors = elements
+            Successors = new List<DataSuccessor>(){element}
         };
     }
 
     private static DataSuccessor GetNumericAttribute(ViralAttribute viralAttribute)
     {
-        var viralAttributeNumeric = JsonConvert.DeserializeObject<ViralAttributeNumeric>(viralAttribute.AttributeData.ToString());
+        var viralAttributeNumeric = viralAttribute.AttributeData as ViralAttributeNumeric;
         return new DataSuccessor()
         {
             Meta = "Признак",
@@ -219,7 +209,7 @@ public class IacpaasDataConverter
                     Meta = "ед.изм.",
                     ValueType = DataSuccessor.Str,
                     Type = DataSuccessor.TerminalValue,
-                    // Value = data.Unit
+                    Value = data.Unit
                 },
             }
         };

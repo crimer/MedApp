@@ -2,18 +2,52 @@
 <div class="d-flex gap-5 align-center">
     <MudText Typo="Typo.h5">Пациент</MudText>
 
-    <Entry Title="Национальность" Value="@Pacient.Nationality"/>
+    <Entry Title="Национальность" 
+           OnChange="OnNationalityChange"
+           Value="@Pacient.Nationality"/>
 
-    <Dropdown Title="Пол" Items="@Pacient.SexValues" Selected="@Pacient.SelectedSex"/>
+    <Dropdown Title="Пол" 
+              OnChange="@OnSexChange"
+              Items="@Pacient.SexValues" 
+              Selected="@Pacient.SelectedSex"/>
 
-    <NumericEntry Title="Возраст" Value="@Pacient.AgeValue"/>
+    <NumericEntry Title="Возраст" 
+                  OnChange="OnAgeChange"
+                  Value="@Pacient.AgeValue"/>
 
-    <Dropdown Title="Возраст" Items="@Pacient.AgeValues" Selected="@Pacient.SelectedAgeUnit"/>
+    <Dropdown Title="Возраст" 
+              OnChange="@OnAgeUnitChange"
+              Items="@Pacient.AgeValues"
+              Selected="@Pacient.SelectedAgeUnit"/>
 </div>
 
 @code {
 
     [Parameter]
     public Pacient Pacient { get; set; }
+
+    private void OnAgeUnitChange(string val)
+    {
+        if(Pacient != null)
+            Pacient.SelectedAgeUnit = val;
+    }
+
+    private void OnAgeChange(double obj)
+    {
+        if(Pacient != null)
+            Pacient.AgeValue = (int)obj;
+    }
+
+    private void OnSexChange(string obj)
+    {
+        if(Pacient != null)
+            Pacient.SelectedSex = obj;
+    }
+
+    private void OnNationalityChange(string obj)
+    {
+        if (Pacient != null)
+            Pacient.Nationality = obj;
+    }
 
 }

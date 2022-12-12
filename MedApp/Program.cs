@@ -33,6 +33,7 @@ builder.Services.AddSingleton<AuthHandler>();
 builder.Services.AddSingleton<ViralImportDataHandler>();
 builder.Services.AddSingleton<RunDiagnosticServiceHandler>();
 builder.Services.AddSingleton<IACPaaSLoadDataHandler>();
+builder.Services.AddSingleton<PrepareSuccessorHandler>();
 builder.Services.AddSingleton<MedContext>();
     
 builder.WebHost.UseElectron(args);

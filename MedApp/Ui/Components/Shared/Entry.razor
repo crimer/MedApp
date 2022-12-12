@@ -1,6 +1,6 @@
 ﻿
-<MudTextField @bind-Value="@Value" 
-              Label="@Title" 
+<MudTextField Label="@Title" 
+              ValueChanged="OnChange"
               T="string"
               Variant="Variant.Outlined"/>
 
@@ -10,4 +10,7 @@
 
     [Parameter]
     public string Title { get; set; }
+    
+    [Parameter]
+    public EventCallback<string> OnChange { get; set; }
 }

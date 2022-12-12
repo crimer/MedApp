@@ -3,9 +3,9 @@
 
 <MudSelect Dense="true"
            T="string"
-           @bind-Value="@Selected"
            Label="@Title"
            Clearable="true"
+           ValueChanged="OnChange"
            Variant="Variant.Outlined"
            AnchorOrigin="Origin.BottomCenter">
     @foreach (var val in Items)
@@ -24,7 +24,9 @@
 
     [Parameter]
     public string Title { get; set; }
-
+    
+    [Parameter]
+    public EventCallback<string> OnChange { get; set; }
 
 }
 

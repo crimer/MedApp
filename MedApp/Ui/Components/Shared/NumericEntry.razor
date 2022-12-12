@@ -1,4 +1,4 @@
-﻿<MudNumericField @bind-Value="@Value" 
+﻿<MudNumericField ValueChanged="@OnChange"
                  Label="@Title" 
                  T="double"
                  Variant="Variant.Outlined"/>
@@ -9,4 +9,7 @@
 
     [Parameter]
     public string Title { get; set; }
+    
+    [Parameter]
+    public EventCallback<double> OnChange { get; set; }
 }

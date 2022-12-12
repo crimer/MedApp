@@ -20,17 +20,6 @@ public class ViralAttribute
     /// Имя признака
     /// </summary>
     public string AttributeName { get; set; }
-
-    public ViralAttribute(string attributeName, AttributeType attributeType)
-    {
-        AttributeType = attributeType;
-        AttributeName = attributeName;
-    }
-
-    public ViralAttribute()
-    {
-        
-    }
 }
 
 /// <summary>
@@ -152,31 +141,31 @@ public class Pacient
 public class PatientData
 {
     public Pacient Pacient { get; set; }
-    
+
     /// <summary>
     /// Жалобы
     /// </summary>
-    public List<ViralAttribute> Complaints { get; set; }
+    public List<ViralAttribute> Complaints { get; set; } = new();
         
     /// <summary>
     /// Объективное состояние больного
     /// </summary>
-    public List<ViralAttribute> PatientObjectiveCondition { get; set; }
+    public List<ViralAttribute> PatientObjectiveCondition { get; set; } = new();
         
     /// <summary>
     /// Лабораторные исследования (Клинический анализ крови)
     /// </summary>
-    public List<ViralAttribute> ClinicalBloodLaboratoryStudies { get; set; }
+    public List<ViralAttribute> ClinicalBloodLaboratoryStudies { get; set; } = new();
         
     /// <summary>
     /// Лабораторные исследования (Биохимический анализ крови)
     /// </summary>
-    public List<ViralAttribute> BioBloodLaboratoryStudies { get; set; }
+    public List<ViralAttribute> BioBloodLaboratoryStudies { get; set; } = new();
         
     /// <summary>
     /// Инструментальные исследования
     /// </summary>
-    public List<ViralAttribute> InstrumentalResearch { get; set; }
+    public List<ViralAttribute> InstrumentalResearch { get; set; } = new();
         
     /// <summary>
     /// История настоящего заболевания

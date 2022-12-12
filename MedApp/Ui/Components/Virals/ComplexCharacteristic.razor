@@ -3,12 +3,14 @@
     @if (Characteristic.Type == AttributeType.Quality && _quantityData is not null)
     {
         <QualityViral Title="@Characteristic.Name"
+                      OnChange="@OnQuantityChange"
                       AttributeQuality="@_quantityData"/>
     }
 
     @if (Characteristic.Type == AttributeType.Numeric && _numericData is not null)
     {
         <NumericViral Title="@Characteristic.Name"
+                      OnChange="@OnNumericChange"
                       AttributeNumeric="@_numericData"
                       UnitTitle="Ед. изм."/>
     }
@@ -29,9 +31,18 @@
 
         if (Characteristic.Type == AttributeType.Quality)
             _quantityData = Characteristic.Data as ViralAttributeQuality;
-
-
-        StateHasChanged();
+    }
+    
+    private void OnNumericChange(double val)
+    {
+        if(_numericData != null)
+            _numericData.Value = val;
+    }
+    
+    private void OnQuantityChange(string val)
+    {
+        if(_quantityData != null)
+            _quantityData.SelectedItem = val;
     }
 
 }

@@ -12,12 +12,14 @@
     @if (ViralAttribute.AttributeType == AttributeType.Quality && _quantityData is not null)
     {
         <QualityViral Title="@ViralAttribute.AttributeName"
+                      OnChange="@OnQuantityChange"
                       AttributeQuality="@_quantityData"/>
     }
 
     @if (ViralAttribute.AttributeType == AttributeType.Numeric && _numericData is not null)
     {
         <NumericViral Title="@ViralAttribute.AttributeName"
+                      OnChange="@OnNumericChange"
                       AttributeNumeric="@_numericData"
                       UnitTitle="@ViralAttribute.AttributeName"/>
     }
@@ -42,6 +44,18 @@
 
         if (ViralAttribute.AttributeType == AttributeType.Complex)
             _complexData = ViralAttribute.AttributeData as ViralAttributeComplex;
+    }
+    
+    private void OnNumericChange(double val)
+    {
+        if(_numericData != null)
+            _numericData.Value = val;
+    }
+    
+    private void OnQuantityChange(string val)
+    {
+        if(_quantityData != null)
+            _quantityData.SelectedItem = val;
     }
 
 }

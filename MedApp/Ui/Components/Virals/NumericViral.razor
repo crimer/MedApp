@@ -3,7 +3,8 @@
 
 <div class="d-flex flex-column gap-5">
     <NumericEntry Title="@(Title + " " + AttributeNumeric.Unit)"
-           Value="@AttributeNumeric.Value"/>
+                  Value="@AttributeNumeric.Value"
+                  OnChange="OnChange"/>
 </div>
 
 @code {
@@ -16,5 +17,8 @@
     
     [Parameter]
     public string UnitTitle { get; set; }
-
+    
+    [Parameter]
+    public EventCallback<double> OnChange { get; set; }
+    
 }

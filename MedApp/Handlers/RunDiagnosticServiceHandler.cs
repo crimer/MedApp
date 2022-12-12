@@ -17,7 +17,6 @@ public class RunDiagnosticServiceHandler
         if (importResult.IsFailed)
             return Result.Fail(importResult.Summary());
             
-        // AnsiConsole.WriteLine();
 
         var runResult = await RunDiagnosticAsync();
         if (runResult.IsFailed)
@@ -28,36 +27,22 @@ public class RunDiagnosticServiceHandler
 
     private async Task<Result> RunDiagnosticAsync()
     {
-        // Logger.Info("Запуск сервиса диагностики");
-            
-        var res = await IACPaaSApiClient.Instance.RunServiceAsync();
+        var res = await IACPaaSApiClient.Instance.RunDiagnosticServiceAsync();
         if (res.IsFailed)
-        {
-            // Logger.Error($"Ошибка при запуске сервиса: {res.Summary()}");
             return Result.Fail($"Ошибка при запуске сервиса: {res.Summary()}");
-        }
 
         if (!res.Value.Success)
-        {
-            // Logger.Error($"На удалось запустить сервис на платформе");
             return Result.Fail($"На удалось запустить сервис на платформе: {res.Summary()}");
-        }
             
-        // Logger.Success("Сервис дисгностики успешно запущен");
         return Result.Ok();
     }
 
     private async Task<Result> ImportIbToDiagnosticResourceAsync(string importedIbName)
     {
-        // Logger.Info($"Вставка ИБ {importedIbName} в инфоресурс диагностики");
-
         // Запрос результата диагностики
         var data = await IACPaaSApiClient.Instance.GetDiagnosticResultDataAsync();
         if (data.IsFailed)
-        {
-            // Logger.Error($"Вставка ИБ {importedIbName} в ресурс диагностики завершилась неудачно: {data.Summary()}");
             return  Result.Fail(data.Summary());
-        }
 
         var resultData = data.Value.Data;
         resultData.Successors.Clear();
@@ -68,17 +53,10 @@ public class RunDiagnosticServiceHandler
         // Запрос на импорт названия ИБ в ресурс диагностики
         var importResult = await IACPaaSApiClient.Instance.ImportDataAsync(new ImportToInforesourceDto(resultData.Path, json, true));
         if (importResult.IsFailed)
-        {
-            // Logger.Error($"Не удалось импортировать данные в ресурс диагностики: {importResult.Summary()}");
             return Result.Fail(importResult.Summary());
-        }
 
         if (!importResult.Value.Success)
-        {
-            // Logger.Error($"Не удалось импортировать данные в ресурс диагностики: {importResult.Value.Error}");
-            // Logger.Error(importResult.Value.Explanation);
             return Result.Fail($"Не удалось импортировать данные в ресурс диагностики: {importResult.Value.Error}");
-        }
 
         // Logger.Success($"В ресурс диагностики успешно импотрирована новая ИБ {importedIbName}");
 

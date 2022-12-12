@@ -12,83 +12,195 @@
 <PageTitle>Med Iacpaas</PageTitle>
 
 <MudContainer Fixed="true" Style="height: 100%" Class="d-flex flex-column gap-3 overflow-hidden">
+    <MudOverlay @bind-Visible="_isLoading" DarkBackground="true" AutoClose="true"/>
     <MudText Typo="Typo.h3">Med -> Iacpaas</MudText>
 
-    <div class="d-flex flex-row gap-6 flex-1">
-        <MudPaper Width="30%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
-
-            <div Class="d-flex flex-row justify-space-between">
-                <MudText Typo="Typo.h5">Секции</MudText>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="OnClear">Отчистить</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
-            </div>
-
-            <div class="flex-1 overflow-scroll">
-                @foreach (var section in _sections)
-                {
-                    <MudCheckBox Checked="@(section.IsSelected)"
-                                 T="bool"
-                                 CheckedChanged="(_) => SectionCheckedChange(section)"
-                                 Label="@(section.Name)"
-                                 Color="Color.Primary"/>
-                }
-            </div>
+    @if (_isLoading)
+    {
+        <MudPaper Class="pa-5" Style="
+            z-index: 999; 
+            width: fit-content;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        ">
+            <MudText Typo="Typo.h6">Запуск...</MudText>
+            <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true"/>
         </MudPaper>
+    }
+    else
+    {
+        <div class="d-flex flex-row gap-6 flex-1">
+            <MudPaper Width="30%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
 
-        <MudPaper Width="70%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
-            @if (_patientData is not null && _patientData.Pacient is not null)
-            {
-                <PacientDataView Pacient="_patientData.Pacient"/>
-            }
+                <div Class="d-flex flex-row justify-space-between">
+                    <MudText Typo="Typo.h5">Секции</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="OnClear">Отчистить</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
+                </div>
 
-            @if (!_selectedComponents.IsNullOrEmpty())
-            {
                 <div class="flex-1 overflow-scroll">
-                    @foreach (var variableComponent in _selectedComponents)
+                    <MudText Typo="Typo.body1">Жалобы</MudText>
+                    @foreach (var section in _complaintsSections)
+                    {
+                        <MudCheckBox Checked="@(section.IsSelected)"
+                                     T="bool"
+                                     CheckedChanged="(_) => SectionCheckedChange(section, _originalData.Complaints, _complaintsComponents)"
+                                     Label="@(section.Name)"
+                                     Color="Color.Primary"/>
+                    }
+
+                    <MudText Typo="Typo.body1">Инструментальные исследования</MudText>
+                    @foreach (var section in _instrumentalResearchSections)
+                    {
+                        <MudCheckBox Checked="@(section.IsSelected)"
+                                     T="bool"
+                                     CheckedChanged="(_) => SectionCheckedChange(section, _originalData.InstrumentalResearch, _instrumentalResearchComponents)"
+                                     Label="@(section.Name)"
+                                     Color="Color.Primary"/>
+                    }
+
+                    <MudText Typo="Typo.body1">Объективное состояние больного</MudText>
+                    @foreach (var section in _patientObjectiveConditionSections)
+                    {
+                        <MudCheckBox Checked="@(section.IsSelected)"
+                                     T="bool"
+                                     CheckedChanged="(_) => SectionCheckedChange(section, _originalData.PatientObjectiveCondition, _patientObjectiveConditionComponents)"
+                                     Label="@(section.Name)"
+                                     Color="Color.Primary"/>
+                    }
+
+                    <MudText Typo="Typo.body1">Лабораторные исследования (Биохимический анализ крови)</MudText>
+                    @foreach (var section in _bioBloodLaboratoryStudiesSections)
+                    {
+                        <MudCheckBox Checked="@(section.IsSelected)"
+                                     T="bool"
+                                     CheckedChanged="(_) => SectionCheckedChange(section, _originalData.BioBloodLaboratoryStudies, _bioBloodLaboratoryStudiesComponents)"
+                                     Label="@(section.Name)"
+                                     Color="Color.Primary"/>
+                    }
+
+                    <MudText Typo="Typo.body1">Лабораторные исследования (Клинический анализ крови)</MudText>
+                    @foreach (var section in _clinicalBloodLaboratoryStudiesSections)
+                    {
+                        <MudCheckBox Checked="@(section.IsSelected)"
+                                     T="bool"
+                                     CheckedChanged="(_) => SectionCheckedChange(section, _originalData.ClinicalBloodLaboratoryStudies, _clinicalBloodLaboratoryStudiesComponents)"
+                                     Label="@(section.Name)"
+                                     Color="Color.Primary"/>
+                    }
+                </div>
+            </MudPaper>
+
+            <MudPaper Width="70%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
+                @if (_originalData is not null && _originalData.Pacient is not null)
+                {
+                    <PacientDataView Pacient="_originalData.Pacient"/>
+                }
+
+                <div class="flex-1 overflow-scroll">
+                    @foreach (var variableComponent in _complaintsComponents)
+                    {
+                        <Viral ViralAttribute="@variableComponent"/>
+                    }
+                    @foreach (var variableComponent in _instrumentalResearchComponents)
+                    {
+                        <Viral ViralAttribute="@variableComponent"/>
+                    }
+                    @foreach (var variableComponent in _patientObjectiveConditionComponents)
+                    {
+                        <Viral ViralAttribute="@variableComponent"/>
+                    }
+                    @foreach (var variableComponent in _bioBloodLaboratoryStudiesComponents)
+                    {
+                        <Viral ViralAttribute="@variableComponent"/>
+                    }
+                    @foreach (var variableComponent in _clinicalBloodLaboratoryStudiesComponents)
                     {
                         <Viral ViralAttribute="@variableComponent"/>
                     }
                 </div>
-            }
-            <PacientView/>
-        </MudPaper>
-    </div>
+            </MudPaper>
+        </div>
+    }
 </MudContainer>
 
 @code {
 
     private bool _isLoading = false;
 
-    private PatientData _patientData;
-    private readonly List<SectionView> _sections = new();
-    private readonly List<ViralAttribute> _selectedComponents = new();
-    private readonly List<ViralAttribute> _allAttributes = new();
+    private PatientData _originalData;
+    private readonly PatientData _toImportData = new();
+
+    private readonly List<SectionView> _complaintsSections = new();
+    private readonly List<ViralAttribute> _complaintsComponents = new();
+
+    private readonly List<SectionView> _instrumentalResearchSections = new();
+    private readonly List<ViralAttribute> _instrumentalResearchComponents = new();
+
+    private readonly List<SectionView> _patientObjectiveConditionSections = new();
+    private readonly List<ViralAttribute> _patientObjectiveConditionComponents = new();
+
+    private readonly List<SectionView> _bioBloodLaboratoryStudiesSections = new();
+    private readonly List<ViralAttribute> _bioBloodLaboratoryStudiesComponents = new();
+
+    private readonly List<SectionView> _clinicalBloodLaboratoryStudiesSections = new();
+    private readonly List<ViralAttribute> _clinicalBloodLaboratoryStudiesComponents = new();
 
     protected override void OnParametersSet()
     {
-        _patientData = PatientDataBuilder.GetData();
+        _originalData = PatientDataBuilder.GetData();
 
-        _allAttributes.AddRange(_patientData.Complaints);
-        _allAttributes.AddRange(_patientData.InstrumentalResearch);
-        _allAttributes.AddRange(_patientData.PatientObjectiveCondition);
-        _allAttributes.AddRange(_patientData.BioBloodLaboratoryStudies);
-        _allAttributes.AddRange(_patientData.ClinicalBloodLaboratoryStudies);
-
-        _sections.AddRange(_allAttributes
-            .Select(s => new SectionView(false, s.AttributeName))
-            .ToList());
+        _complaintsSections.AddRange(_originalData.Complaints.Select(s => new SectionView(s.AttributeName)));
+        _instrumentalResearchSections.AddRange(_originalData.InstrumentalResearch.Select(s => new SectionView(s.AttributeName)));
+        _patientObjectiveConditionSections.AddRange(_originalData.PatientObjectiveCondition.Select(s => new SectionView(s.AttributeName)));
+        _bioBloodLaboratoryStudiesSections.AddRange(_originalData.BioBloodLaboratoryStudies.Select(s => new SectionView(s.AttributeName)));
+        _clinicalBloodLaboratoryStudiesSections.AddRange(_originalData.ClinicalBloodLaboratoryStudies.Select(s => new SectionView(s.AttributeName)));
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await AuthAsync();
-
-        
-    }
+    protected override Task OnInitializedAsync() => AuthAsync();
 
     private async Task OnCreateAsync()
     {
-        var r = _sections.Where(el => el.IsSelected);
+        try
+        {
+            _isLoading = true;
+
+            _toImportData.Pacient = _originalData.Pacient;
+            _toImportData.Complaints.AddRange(_complaintsComponents);
+            _toImportData.InstrumentalResearch.AddRange(_instrumentalResearchComponents);
+            _toImportData.PatientObjectiveCondition.AddRange(_patientObjectiveConditionComponents);
+            _toImportData.BioBloodLaboratoryStudies.AddRange(_bioBloodLaboratoryStudiesComponents);
+            _toImportData.ClinicalBloodLaboratoryStudies.AddRange(_clinicalBloodLaboratoryStudiesComponents);
+
+            var result = await MedContext.ImportDataAsync(_toImportData);
+            if (result.IsFailed)
+            {
+                await OpenInfoDialogAsync("Ошибка", $"Ошибка импорта данных и запуска дигностики: {Environment.NewLine}{result.Summary()}");
+                return;
+            }
+
+            var parameters = new DialogParameters
+            {
+                { nameof(ViralTreeDialog.Data), result.Value }
+            };
+
+            await DialogService.ShowAsync<ViralTreeDialog>("Результат", parameters, new DialogOptions
+            {
+                CloseOnEscapeKey = false,
+                FullScreen = true,
+                FullWidth = true,
+                DisableBackdropClick = true,
+                CloseButton = true
+            });
+            
+            OnClear();
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
 
     private async Task AuthAsync()
@@ -126,20 +238,29 @@
         SnackbarService.Add(message, severity: severity);
     }
 
-    private void SectionCheckedChange(SectionView sectionView)
+    private void SectionCheckedChange(SectionView sectionView, List<ViralAttribute> attributes, List<ViralAttribute> selectedComponents)
     {
         sectionView.IsSelected = !sectionView.IsSelected;
 
         if (sectionView.IsSelected)
-            _selectedComponents.Add(_allAttributes.First(el => el.AttributeName == sectionView.Name));
+            selectedComponents.Add(attributes.First(el => el.AttributeName == sectionView.Name));
         else
-            _selectedComponents.Remove(_allAttributes.First(el => el.AttributeName == sectionView.Name));
+            selectedComponents.Remove(attributes.First(el => el.AttributeName == sectionView.Name));
     }
 
     private void OnClear()
     {
-        _sections.ForEach(s => s.IsSelected = false);
-        _selectedComponents.Clear();
+        _complaintsSections.ForEach(s => s.IsSelected = false);
+        _instrumentalResearchSections.ForEach(s => s.IsSelected = false);
+        _patientObjectiveConditionSections.ForEach(s => s.IsSelected = false);
+        _bioBloodLaboratoryStudiesSections.ForEach(s => s.IsSelected = false);
+        _clinicalBloodLaboratoryStudiesSections.ForEach(s => s.IsSelected = false);
+
+        _complaintsComponents.Clear();
+        _patientObjectiveConditionComponents.Clear();
+        _instrumentalResearchComponents.Clear();
+        _bioBloodLaboratoryStudiesComponents.Clear();
+        _clinicalBloodLaboratoryStudiesComponents.Clear();
     }
 
 }

@@ -5,9 +5,9 @@ public class SectionView
     public bool IsSelected { get; set; }
     public string Name { get; }
 
-    public SectionView(bool isSelected, string name)
+    public SectionView(string name)
     {
-        IsSelected = isSelected;
+        IsSelected = false;
         Name = name;
     }
 }

@@ -3,7 +3,8 @@
 
 <Dropdown Title="@Title"
           Items="@AttributeQuality.Items"
-          Selected="@AttributeQuality.SelectedItem"/>
+          Selected="@AttributeQuality.SelectedItem"
+          OnChange="OnChange"/>
 
 @code {
 
@@ -12,5 +13,8 @@
     
     [Parameter]
     public string Title { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnChange { get; set; }
 
 }
