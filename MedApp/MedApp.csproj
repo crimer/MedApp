@@ -43,6 +43,10 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Remove="Ui\Pages\Main\Components\**" />
+        <None Remove="cardiogram.ico" />
+        <EmbeddedResource Include="cardiogram.ico">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
         <None Remove="Ui\Pages\Main\Components\**" />

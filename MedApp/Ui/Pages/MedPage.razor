@@ -36,6 +36,7 @@
 
                 <div Class="d-flex flex-row justify-space-between">
                     <MudText Typo="Typo.h5">Секции</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="OnNewComplaint">Новая жалоба</MudButton>
                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="OnClear">Отчистить</MudButton>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateAsync">Создать</MudButton>
                 </div>
@@ -261,6 +262,16 @@
         _instrumentalResearchComponents.Clear();
         _bioBloodLaboratoryStudiesComponents.Clear();
         _clinicalBloodLaboratoryStudiesComponents.Clear();
+    }
+
+    private async Task OnNewComplaint()
+    {
+        var parameters = new DialogParameters();
+        await DialogService.ShowAsync<NewComplationDialog>("Новая жалоба", parameters, new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.Large
+        });
     }
 
 }

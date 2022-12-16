@@ -1,0 +1,54 @@
+﻿@using MedApp.Models.Viral
+<MudDialog>
+    <DialogContent>
+        <MudRadioGroup T="AttributeType" Name="Тип признака" @bind-SelectedOption="@_selectedSection">
+            <MudRadio Option="@AttributeType.Quality" Color="Color.Primary">Качественный признак</MudRadio>
+            <MudRadio Option="@AttributeType.Numeric" Color="Color.Primary">Числовой признак</MudRadio>
+            <MudRadio Option="@AttributeType.Complex" Color="Color.Primary">Комплексный признак</MudRadio>
+        </MudRadioGroup>
+        <div>
+            @if (_selectedSection == AttributeType.Quality)
+            {
+                <Viral ViralAttribute="@_qualityViral"/>
+            }
+            @* @if (_selectedSection == AttributeType.Numeric) *@
+            @* { *@
+            @*     <Viral ViralAttribute="@variableComponent"/> *@
+            @* } *@
+            @* @if (_selectedSection == AttributeType.Complex) *@
+            @* { *@
+            @*     <Viral ViralAttribute="@variableComponent"/> *@
+            @* } *@
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">Закрыть</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    private readonly ViralAttribute _qualityViral = new ViralAttribute()
+    {
+        AttributeType = AttributeType.Quality,
+        // AttributeData = new ViralAttributeQuality()
+    };
+
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private AttributeType _selectedSection = AttributeType.Quality;
+
+    private void OnChange(ChangeEventArgs changeEventArgs)
+    {
+        if (!Enum.TryParse<AttributeType>(changeEventArgs.Value?.ToString(), out var selectedValue))
+            return;
+
+        _selectedSection = selectedValue;
+    }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+}

@@ -1,9 +1,10 @@
 using System.Globalization;
 using MedApp.Handlers;
 using ElectronNET.API;
+using ElectronNET.API.Entities;
 using MedApp.Context;
-using MedApp.Models;
 using MedApp.Models.Viral;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -12,6 +13,7 @@ SetLocale(CultureInfo.CreateSpecificCulture("ru-Ru"));
 // electronize init
 // electronize start /watch
 var builder = WebApplication.CreateBuilder(args);
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -47,8 +49,14 @@ Task.Run(async () =>
 
 Task.Run(async () =>
 {
-    var browserWindow = await Electron.WindowManager.CreateWindowAsync();
+    var browserWindow = await Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions()
+    {
+        Center = true,
+        Closable = true,
+        Icon = Path.Combine(Environment.CurrentDirectory, "cardiogram.ico")
+    });
     await browserWindow.WebContents.Session.ClearCacheAsync();
+    browserWindow.RemoveMenu();
     browserWindow.OnReadyToShow += () => browserWindow.Show();  
     browserWindow.OnClosed += () => Electron.App.Quit();
 });
