@@ -1,0 +1,21 @@
+﻿<div class="d-flex justify-space-between pa-2">
+    <MudText Typo="Typo.h4">Med Iacpaas</MudText>
+    <div class="d-flex gap-5">
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="OnNewComplaintAsync"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Medium" OnClick="OnClear"/>
+        <MudIconButton Icon="@Icons.Material.Filled.SaveAs" Variant="Variant.Filled" Color="Color.Success" Size="Size.Medium" OnClick="OnCreateAsync"/>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback OnNewComplaintAsync { get; set; }
+
+    [Parameter]
+    public EventCallback OnClear { get; set; }
+
+    [Parameter]
+    public EventCallback OnCreateAsync { get; set; }
+
+}

@@ -1,0 +1,68 @@
+﻿@using MedApp.Context
+@using MedApp.Extensions
+@using MedApp.Models.Ui
+@using MedApp.Models.Viral
+@using MedApp.Ui.Dialogs
+
+
+<div class="d-flex flex-row gap-6 flex-1">
+    <MudPaper Width="30%" Height="55%" Square="true" Class="d-flex flex-column pa-5">
+
+        <div class="flex-1 overflow-scroll">
+            @foreach (var sideBarItem in SideBarItems)
+            {
+                <TextDivider Text="@(sideBarItem.SectionName)"/>
+                foreach (var sectionItem in sideBarItem.SectionItems)
+                {
+                    <MudCheckBox Checked="@(sectionItem.IsSelected)"
+                                 T="bool"
+                                 CheckedChanged="(_) => SectionCheckedChangeAsync(sideBarItem.ViralDataType, sectionItem)"
+                                 Label="@(sectionItem.Name)"
+                                 Color="Color.Primary"/>
+                }
+            }
+        </div>
+    </MudPaper>
+
+    @* @if (_originalData is not null && _originalData.Pacient is not null) *@
+    @* { *@
+    @*     <PacientDataView Pacient="_originalData.Pacient"/> *@
+    @* } *@
+    @* <div Class="d-flex flex-column"> *@
+    @*     <div class="flex-1 overflow-scroll"> *@
+    @*         @foreach (var variableComponent in _complaintsComponents) *@
+    @*         { *@
+    @*             <Viral ViralAttribute="@variableComponent"/> *@
+    @*         } *@
+    @*         @foreach (var variableComponent in _instrumentalResearchComponents) *@
+    @*         { *@
+    @*             <Viral ViralAttribute="@variableComponent"/> *@
+    @*         } *@
+    @*         @foreach (var variableComponent in _patientObjectiveConditionComponents) *@
+    @*         { *@
+    @*             <Viral ViralAttribute="@variableComponent"/> *@
+    @*         } *@
+    @*         @foreach (var variableComponent in _bioBloodLaboratoryStudiesComponents) *@
+    @*         { *@
+    @*             <Viral ViralAttribute="@variableComponent"/> *@
+    @*         } *@
+    @*         @foreach (var variableComponent in _clinicalBloodLaboratoryStudiesComponents) *@
+    @*         { *@
+    @*             <Viral ViralAttribute="@variableComponent"/> *@
+    @*         } *@
+    @*     </div> *@
+    @* </div> *@
+</div>
+
+@code {
+
+    [Parameter]
+    public List<MedPage.SideBarItems> SideBarItems { get; set; }
+
+    [Parameter]
+    public EventCallback<MedPage.OnCheckChangeArgs> OnSectionCheckedChange { get; set; }
+
+    private Task SectionCheckedChangeAsync(MedPage.ViralDataType viralDataType, SectionView sectionItem) 
+        => OnSectionCheckedChange.InvokeAsync(new MedPage.OnCheckChangeArgs(viralDataType, sectionItem));
+
+}

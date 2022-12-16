@@ -1,0 +1,220 @@
+﻿@page "/"
+@using MedApp.Models.Viral
+@using MedApp.Models.Ui
+@using MedApp.Context
+@using MedApp.Extensions
+@using MedApp.Ui.Dialogs
+@inject MedContext MedContext
+@inject IDialogService DialogService
+@inject ISnackbar SnackbarService
+@inject PatientDataBuilder PatientDataBuilder
+
+<PageTitle>Med Iacpaas</PageTitle>
+
+<section class="medPage">
+    <AppHeader OnClear="@OnClear" OnCreateAsync="@OnCreateAsync"/>
+
+    @if (_isLoading)
+    {
+        <AppLoader/>
+    }
+    else
+    {
+        <MedView SidebarItems="@_sideBarItems" OnSectionCheckedChange="@SectionCheckedChange"/>
+    }
+</section>
+
+
+@code {
+
+    public enum ViralDataType
+    {
+        Complaints = 0,
+        InstrumentalResearch = 1,
+        PatientObjectiveCondition = 2,
+        ClinicalBloodLaboratoryStudies = 3,
+        BioBloodLaboratoryStudies = 4,
+    }
+
+    public class SideBarItems
+    {
+        public string SectionName { get; }
+        public List<SectionView> SectionItems { get; }
+        public ViralDataType ViralDataType { get; }
+
+        public SideBarItems(ViralDataType viralDataType, string sectionName, List<SectionView> sectionItems)
+        {
+            ViralDataType = viralDataType;
+            SectionName = sectionName;
+            SectionItems = sectionItems;
+        }
+    }
+    public class OnCheckChangeArgs
+    {
+        public ViralDataType ViralDataType { get; }
+        public SectionView SectionView { get; }
+
+        public OnCheckChangeArgs(ViralDataType viralDataType, SectionView sectionView)
+        {
+            ViralDataType = viralDataType;
+            SectionView = sectionView;
+        }
+    }
+
+    private bool _isLoading;
+    
+    private readonly List<SideBarItems> _sideBarItems = new();
+
+    private PatientData _originalData;
+
+    private readonly PatientData _toImportData = new();
+    
+    protected override void OnParametersSet()
+    {
+        _originalData = PatientDataBuilder.GetData();
+
+        _sideBarItems.Add(new SideBarItems(ViralDataType.Complaints, "Жалобы", _originalData.Complaints.Select(s => new SectionView(s.AttributeName)).ToList()));
+        _sideBarItems.Add(new SideBarItems(ViralDataType.InstrumentalResearch, "Инструментальные исследования", _originalData.InstrumentalResearch.Select(s => new SectionView(s.AttributeName)).ToList()));
+        _sideBarItems.Add(new SideBarItems(ViralDataType.PatientObjectiveCondition, "Объективное состояние больного", _originalData.PatientObjectiveCondition.Select(s => new SectionView(s.AttributeName)).ToList()));
+        _sideBarItems.Add(new SideBarItems(ViralDataType.ClinicalBloodLaboratoryStudies, "Лабораторные исследования (Клинический анализ крови)", _originalData.ClinicalBloodLaboratoryStudies.Select(s => new SectionView(s.AttributeName)).ToList()));
+        _sideBarItems.Add(new SideBarItems(ViralDataType.BioBloodLaboratoryStudies, "Лабораторные исследования (Биохимический анализ крови)", _originalData.BioBloodLaboratoryStudies.Select(s => new SectionView(s.AttributeName)).ToList()));
+    }
+
+    private async Task OnCreateAsync()
+    {
+        try
+        {
+            _isLoading = true;
+
+            // _toImportData.Pacient = _originalData.Pacient;
+            // _toImportData.Complaints.AddRange(_complaintsComponents);
+            // _toImportData.InstrumentalResearch.AddRange(_instrumentalResearchComponents);
+            // _toImportData.PatientObjectiveCondition.AddRange(_patientObjectiveConditionComponents);
+            // _toImportData.BioBloodLaboratoryStudies.AddRange(_bioBloodLaboratoryStudiesComponents);
+            // _toImportData.ClinicalBloodLaboratoryStudies.AddRange(_clinicalBloodLaboratoryStudiesComponents);
+            //
+            // var result = await MedContext.ImportDataAsync(_toImportData);
+            // if (result.IsFailed)
+            // {
+            //     await OpenInfoDialogAsync("Ошибка", $"Ошибка импорта данных и запуска дигностики: {Environment.NewLine}{result.Summary()}");
+            //     return;
+            // }
+            //
+            // var parameters = new DialogParameters
+            // {
+            //     { nameof(ViralTreeDialog.Data), result.Value }
+            // };
+            //
+            // await DialogService.ShowAsync<ViralTreeDialog>("Результат", parameters, new DialogOptions
+            // {
+            //     CloseOnEscapeKey = false,
+            //     FullScreen = true,
+            //     FullWidth = true,
+            //     DisableBackdropClick = true,
+            //     CloseButton = true
+            // });
+
+            // OnClear();
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    protected override Task OnInitializedAsync() => AuthAsync();
+
+    private async Task AuthAsync()
+    {
+        try
+        {
+            var authResult = await MedContext.AuthorizeAsync();
+            if (authResult.IsFailed)
+            {
+                await OpenInfoDialogAsync("Авторизация", $"Ошибка авторизации: {Environment.NewLine}{authResult.Summary()}");
+            }
+            else
+            {
+                OpenSnackbar(Severity.Success, "Авторизация успешна");
+            }
+        }
+        catch (Exception ex)
+        {
+            await OpenInfoDialogAsync("Исключение", $"Исключение при обработке авторизаци: {Environment.NewLine}{ex.Message}");
+        }
+    }
+
+    private Task OpenInfoDialogAsync(string title, string text)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(InfoDialog.Text), text }
+        };
+
+        return DialogService.ShowAsync<InfoDialog>(title, parameters, new DialogOptions { CloseOnEscapeKey = true });
+    }
+
+    private void OpenSnackbar(Severity severity, string message)
+    {
+        SnackbarService.Add(message, severity: severity);
+    }
+
+    private void SectionCheckedChange(OnCheckChangeArgs onCheckChangeArgs)
+    {
+        onCheckChangeArgs.SectionView.IsSelected = !onCheckChangeArgs.SectionView.IsSelected;
+
+        var toImportList = GetViralsFromImport(onCheckChangeArgs.ViralDataType);
+        var original = GetViralsFromOriginal(onCheckChangeArgs.ViralDataType);
+
+        var viralSection = original.FirstOrDefault(v => v.AttributeName == onCheckChangeArgs.SectionView.Name);
+        if(viralSection == null)
+            return;
+
+        if (onCheckChangeArgs.SectionView.IsSelected)
+            toImportList.Add(viralSection);
+        else
+            toImportList.Remove(viralSection);
+    }
+
+    private List<ViralAttribute> GetViralsFromOriginal(ViralDataType viralDataType)
+    {
+        return viralDataType switch 
+        {
+            ViralDataType.Complaints => _originalData.Complaints,
+            ViralDataType.InstrumentalResearch => _originalData.InstrumentalResearch,
+            ViralDataType.PatientObjectiveCondition => _originalData.PatientObjectiveCondition,
+            ViralDataType.BioBloodLaboratoryStudies => _originalData.BioBloodLaboratoryStudies,
+            ViralDataType.ClinicalBloodLaboratoryStudies => _originalData.ClinicalBloodLaboratoryStudies,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+    
+    private List<ViralAttribute> GetViralsFromImport(ViralDataType viralDataType)
+    {
+        return viralDataType switch 
+        {
+            ViralDataType.Complaints => _toImportData.Complaints,
+            ViralDataType.InstrumentalResearch => _toImportData.InstrumentalResearch,
+            ViralDataType.PatientObjectiveCondition => _toImportData.PatientObjectiveCondition,
+            ViralDataType.BioBloodLaboratoryStudies => _toImportData.BioBloodLaboratoryStudies,
+            ViralDataType.ClinicalBloodLaboratoryStudies => _toImportData.ClinicalBloodLaboratoryStudies,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+    
+    private async Task OnNewComplaint()
+    {
+        var parameters = new DialogParameters();
+        await DialogService.ShowAsync<NewComplationDialog>("Новая жалоба", parameters, new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.Large
+        });
+    }
+
+    private void OnClear()
+    {
+        _sideBarItems.ForEach(item => item.SectionItems.ForEach(el => el.IsSelected = false));
+    }
+
+}

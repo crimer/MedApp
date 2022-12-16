@@ -56,7 +56,9 @@ Task.Run(async () =>
         Icon = Path.Combine(Environment.CurrentDirectory, "cardiogram.ico")
     });
     await browserWindow.WebContents.Session.ClearCacheAsync();
+#if RELEACE
     browserWindow.RemoveMenu();
+#endif
     browserWindow.OnReadyToShow += () => browserWindow.Show();  
     browserWindow.OnClosed += () => Electron.App.Quit();
 });

@@ -1,0 +1,20 @@
+﻿<MudOverlay @bind-Visible="IsLoading" DarkBackground="true" AutoClose="true"/>
+
+<MudPaper Class="pa-5" Style="
+            z-index: 999; 
+            width: fit-content;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);">
+    <MudText Typo="Typo.h6">@Text</MudText>
+    <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true"/>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public bool IsLoading { get; set; }
+    
+    [Parameter]
+    public bool Text { get; set; }
+}

@@ -47,11 +47,18 @@
         <EmbeddedResource Include="cardiogram.ico">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
+        <None Remove="Ui\Pages\Med\MedPage.razor.css" />
+        <EmbeddedResource Include="Ui\Pages\Med\MedPage.razor.css" />
+        <None Remove="Ui\Shared\Layout\MainLayout.razor.css" />
+        <EmbeddedResource Include="Ui\Shared\Layout\MainLayout.razor.css" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Ui\Pages\Main\Components\**" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="wwwroot" />
+    </ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="Ui\Pages\Med\Views\PacientDataView.razor" />
     </ItemGroup>
 </Project>

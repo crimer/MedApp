@@ -1,25 +1,26 @@
 ﻿@using MedApp.Models.Viral
-<div class="d-flex gap-5 align-center">
+<MudPaper Class="d-flex gap-5 pa-3 align-center">
     <MudText Typo="Typo.h5">Пациент</MudText>
 
-    <Entry Title="Национальность" 
+    <Entry Title="Национальность"
            OnChange="OnNationalityChange"
            Value="@Pacient.Nationality"/>
 
-    <Dropdown Title="Пол" 
+    <Dropdown Title="Пол"
               OnChange="@OnSexChange"
-              Items="@Pacient.SexValues" 
+              Items="@Pacient.SexValues"
               Selected="@Pacient.SelectedSex"/>
 
-    <NumericEntry Title="Возраст" 
+    <NumericEntry Title="Возраст"
                   OnChange="OnAgeChange"
                   Value="@Pacient.AgeValue"/>
 
-    <Dropdown Title="Возраст" 
+    <Dropdown Title="Возраст"
               OnChange="@OnAgeUnitChange"
               Items="@Pacient.AgeValues"
               Selected="@Pacient.SelectedAgeUnit"/>
-</div>
+</MudPaper>
+
 
 @code {
 
@@ -28,19 +29,19 @@
 
     private void OnAgeUnitChange(string val)
     {
-        if(Pacient != null)
+        if (Pacient != null)
             Pacient.SelectedAgeUnit = val;
     }
 
     private void OnAgeChange(double obj)
     {
-        if(Pacient != null)
+        if (Pacient != null)
             Pacient.AgeValue = (int)obj;
     }
 
     private void OnSexChange(string obj)
     {
-        if(Pacient != null)
+        if (Pacient != null)
             Pacient.SelectedSex = obj;
     }
 
