@@ -48,9 +48,7 @@
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
         <None Remove="Ui\Pages\Med\MedPage.razor.css" />
-        <EmbeddedResource Include="Ui\Pages\Med\MedPage.razor.css" />
         <None Remove="Ui\Shared\Layout\MainLayout.razor.css" />
-        <EmbeddedResource Include="Ui\Shared\Layout\MainLayout.razor.css" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Ui\Pages\Main\Components\**" />
