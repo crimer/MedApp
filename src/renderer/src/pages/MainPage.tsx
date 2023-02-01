@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Card, CardContent, TextField, Typography } from '@mui/material'
-import { SelectInputField } from '../components/SelectInputField'
 import { NumericTextField } from '@renderer/components/NumericTextField'
 
 export const MainPage: React.FC = () => {
@@ -14,9 +13,9 @@ export const MainPage: React.FC = () => {
 
 export const PacientDataForm: React.FC = () => {
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card >
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        <Typography sx={{ fontSize: 18 }} gutterBottom>
           Данные пациента
         </Typography>
 
