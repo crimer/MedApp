@@ -11,7 +11,7 @@ interface IViralListItem {
 export const ViralListItem: React.FC<IViralListItem> = ({ name, isChecked, onSelect, value }) => {
   const labelId = `checkbox-list-label-${uuidv4()}`
   return (
-    <ListItem key={labelId} disablePadding>
+    <ListItem key={labelId} disablePadding dense>
       <ListItemButton role={undefined} onClick={() => onSelect(value)}>
         <ListItemIcon>
           <Checkbox
