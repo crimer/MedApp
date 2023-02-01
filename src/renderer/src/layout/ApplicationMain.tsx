@@ -6,15 +6,14 @@ export const ApplicationMain: React.FC<React.PropsWithChildren> = ({ children })
     <>
       <Box
         component="main"
-        style={{
+        sx={{
           display: 'flex',
           flexGrow: 1,
-          flexDirection: 'column',
-          padding: '30px'
+          flexDirection: 'column'
         }}
       >
         <Toolbar />
-        {children}
+        <Box sx={{ padding: 3 }}>{children}</Box>
       </Box>
     </>
   )

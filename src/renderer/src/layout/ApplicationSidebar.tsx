@@ -16,9 +16,10 @@ export const ApplicationSideBar: React.FC = () => {
   return (
     <Drawer
       variant="permanent"
-      style={{
+      sx={{
         width: drawerWidth,
-        flexShrink: 0
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
       }}
     >
       <Toolbar />

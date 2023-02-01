@@ -1,9 +1,9 @@
 import { InfoModal } from '@renderer/components/InfoModal'
-import { useDialogHook } from '@renderer/hook/useDualogHook'
-import { IacpaasResponse } from '@renderer/repository/dto/IacpaasResponse'
 import { RunServiceAsync } from '@renderer/repository/IacpaasRepository'
 import React, { createContext, PropsWithChildren, useCallback } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
+
+const DiagnosisWithoutUiServiceId = '4640284589039782382'
 
 interface IDiagnosticContext {
   isDiagnostic: boolean
@@ -18,27 +18,30 @@ export const DiagnosticContext = createContext<IDiagnosticContext>({
 })
 
 export const DiagnosticContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { close, isOpen } = useDialogHook()
-
-  const runServiceMutation = useMutation(async () => await RunServiceAsync(), {
-    onError: (error, variables, context) => {},
-    onSuccess: (data, variables, context) => {}
-  })
+  const runServiceMutation = useMutation(
+    async () => await RunServiceAsync(DiagnosisWithoutUiServiceId),
+    {
+      onError: (error, variables, context) => {
+        console.error('Ошибка запуска сервиса диагностики')
+        console.error(error)
+      }
+    }
+  )
 
   const startDiagnosticAsync = useCallback(async () => {
-    const t = await runServiceMutation.mutateAsync('123123')
-	
+    const t = await runServiceMutation.mutateAsync()
   }, [])
 
   return (
-    <DiagnosticContext.Provider value={{ startDiagnosticAsync, isDiagnostic: isLoading }}>
+    <DiagnosticContext.Provider
+      value={{ startDiagnosticAsync, isDiagnostic: runServiceMutation.isLoading }}
+    >
       <>
-		<InfoModal
-		isOpen={isOpen}
-		onClose={close}
-		text={(error as string) ?? ''}
-		title="Ошибка при запуске диагностики"
-		/>
+        <InfoModal
+          isOpen={runServiceMutation.isError}
+          text={(runServiceMutation.error as string) ?? ''}
+          title="Ошибка при запуске диагностики"
+        />
         {children}
       </>
     </DiagnosticContext.Provider>

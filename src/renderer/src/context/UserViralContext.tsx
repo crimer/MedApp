@@ -18,28 +18,24 @@ export const UserViralContext = createContext<IUserViralContext>({
 })
 
 export const UserViralContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { close, isOpen } = useDialogHook()
 
-  const startDiagnosticAsync = useCallback(async () => {
-    await startAsync({})
-  }, [])
-
-  const { isLoading, isError, error, mutateAsync: startAsync } = useMutation(async () => await ImportDataAsync({clearIfExists: false, json: jsonData, path: path}), {
-    onSuccess: (data, variables, context) => {
-        
-    },
+  const importDataMutation = useMutation(async () => await ImportDataAsync({clearIfExists: false, json: "", path: ""}), {
     onError: (error, variables, context) => {
         
     },
   })
 
+  const startDiagnosticAsync = useCallback(async () => {
+    // await startAsync({})
+  }, [])
+  
+
   return (
-    <UserViralContext.Provider value={{ startDiagnosticAsync, isImporting: isLoading }}>
+    <UserViralContext.Provider value={{ startDiagnosticAsync, isImporting: importDataMutation.isLoading }}>
       <>
         <InfoModal
-          isOpen={isError}
-          onClose={close}
-          text={(error as string) ?? ''}
+          isOpen={importDataMutation.isError}
+          text={(importDataMutation.error as string) ?? ''}
           title="Ошибка при импорте истории болезни"
         />
         {children}

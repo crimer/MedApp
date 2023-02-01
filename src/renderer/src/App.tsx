@@ -10,20 +10,21 @@ import { UserViralContextProvider } from './context/UserViralContext'
 
 const queryClient = new QueryClient()
 
-export const App: React.FC = () => (
-  <QueryClientProvider client={queryClient}>
-    <UserViralContextProvider>
-      <DiagnosticContextProvider>
-        <Application />
-      </DiagnosticContextProvider>
-    </UserViralContextProvider>
-  </QueryClientProvider>
-)
-
+export const App: React.FC = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <UserViralContextProvider>
+        <DiagnosticContextProvider>
+          <Application />
+        </DiagnosticContextProvider>
+      </UserViralContextProvider>
+    </QueryClientProvider>
+  )
+}
 const Application: React.FC = () => (
   <>
-    <CssBaseline />
-    <Box style={{ flexGrow: 1 }}>
+    <Box sx={{ display: 'flex', flexGrow: 1 }}>
+      <CssBaseline />
       <ApplicationBar />
       <ApplicationSideBar />
       <ApplicationMain>
