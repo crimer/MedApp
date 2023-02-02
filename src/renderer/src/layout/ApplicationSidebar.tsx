@@ -56,15 +56,21 @@ const ViralItemsList: React.FC<IViralItemsList> = ({
   onRemoveViralItem,
   selectedVirals
 }) => {
-  const isExist = useCallback((viralItem: AvailableViral): boolean => {
-    const isExistElement = selectedVirals.find((el) => el.name === viralItem.name)
-    return isExistElement !== undefined
-  },[selectedVirals])
+  const isExist = useCallback(
+    (viralItem: AvailableViral): boolean => {
+      const isExistElement = selectedVirals.find((el) => el.name === viralItem.name)
+      return isExistElement !== undefined
+    },
+    [selectedVirals]
+  )
 
-  const onSelectItem = useCallback((viralItem: AvailableViral) => {
-    if (isExist(viralItem)) onRemoveViralItem(viralItem)
-    else onSelectViralItem(viralItem)
-  },[selectedVirals, onSelectViralItem, onRemoveViralItem])
+  const onSelectItem = useCallback(
+    (viralItem: AvailableViral) => {
+      if (isExist(viralItem)) onRemoveViralItem(viralItem)
+      else onSelectViralItem(viralItem)
+    },
+    [selectedVirals, onSelectViralItem, onRemoveViralItem]
+  )
 
   return (
     <List

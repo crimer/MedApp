@@ -2,14 +2,11 @@ import { FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/materia
 import { MenuItem } from 'electron'
 import React from 'react'
 
-interface ISelectMenuItem {
-  name: string
-  value: object
-}
+
 
 interface ISelectInput {
   title: string
-  items: ISelectMenuItem[]
+  items: string[]
   onChange?: ((event: SelectChangeEvent<string>, child: React.ReactNode) => void) | undefined
 }
 

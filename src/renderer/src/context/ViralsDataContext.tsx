@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useCallback, useEffect, useState } from 'react'
+import React, { createContext, PropsWithChildren, useCallback, useState } from 'react'
 import {
   AvailableViral,
   AvailableViralGroup,
@@ -23,30 +23,35 @@ export const ViralsDataContext = createContext<IViralsDataContext>({
   }
 })
 
-export type AvailableViralGroupView = {
-  name: string
-  virals: AvailableViral[]
-}
-
 export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  /** Признаки выбранные для заполнения */
   const [selectedVirals, setSelectedVirals] = useState<AvailableViral[]>([])
 
-  const onSelectViralItem = useCallback((viralItem: AvailableViral) => {
-    console.log(viralItem.name)
-	setSelectedVirals(prev => [...prev, viralItem])
-  }, [setSelectedVirals])
+  /** Выбор признака */
+  const onSelectViralItem = useCallback(
+    (viralItem: AvailableViral) => {
+      console.log(viralItem.name)
+      setSelectedVirals((prev) => [...prev, viralItem])
+    },
+    [setSelectedVirals]
+  )
 
-  const onRemoveViralItem = useCallback((viralItem: AvailableViral) => {
-    setSelectedVirals(prev => {
-		const isExist = prev.find(el => el.name === viralItem.name)
-		if(isExist)
-			return [...prev.filter(item => item.name !== viralItem.name)]
-		return prev
-	})
-  }, [setSelectedVirals])
+  /** Удаление признака */
+  const onRemoveViralItem = useCallback(
+    (viralItem: AvailableViral) => {
+      setSelectedVirals((prev) => {
+        const isExist = prev.find((el) => el.name === viralItem.name)
+        if (isExist) return [...prev.filter((item) => item.name !== viralItem.name)]
+        return prev
+      })
+    },
+    [setSelectedVirals]
+  )
 
   return (
-    <ViralsDataContext.Provider value={{ availableViralGroups, onSelectViralItem, selectedVirals, onRemoveViralItem }}>
+    <ViralsDataContext.Provider
+      value={{ availableViralGroups, onSelectViralItem, selectedVirals, onRemoveViralItem }}
+    >
       {children}
     </ViralsDataContext.Provider>
   )

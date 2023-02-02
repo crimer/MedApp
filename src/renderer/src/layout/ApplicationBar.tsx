@@ -13,10 +13,14 @@ export const ApplicationBar: React.FC = () => {
     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
         <Typography variant="h6" noWrap component="div" style={{ flexGrow: 1, display: 'block' }}>
-          Med App
+          IACPaaS Med App
         </Typography>
         <Button variant="contained" color="info">
           Отчистить
+        </Button>
+        <Divider orientation="vertical" style={{ margin: '0 10px 0 10px' }} />
+        <Button variant="contained" color="info">
+          Сохранить
         </Button>
         <Divider orientation="vertical" style={{ margin: '0 10px 0 10px' }} />
         <Button variant="contained" color="info" onClick={startDiagnosticAsync}>
