@@ -31,6 +31,7 @@ export const MainPage: React.FC = () => {
 interface IViralElementBuilder {
   viral: AvailableViral
 }
+
 const ViralElementBuilder: React.FC<IViralElementBuilder> = ({ viral }) => {
   return (
     <>
@@ -82,7 +83,7 @@ interface IComplexAttribute extends IAttribute {
 }
 const ComplexAttribute: React.FC<IComplexAttribute> = ({ viral, name }) => {
   return (
-    <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {viral.characteristics.map((ch) => (
         <Characteristic item={ch} key={newGuid()} />
       ))}

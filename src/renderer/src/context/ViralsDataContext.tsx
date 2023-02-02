@@ -30,7 +30,6 @@ export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ childre
   /** Выбор признака */
   const onSelectViralItem = useCallback(
     (viralItem: AvailableViral) => {
-      console.log(viralItem.name)
       setSelectedVirals((prev) => [...prev, viralItem])
     },
     [setSelectedVirals]
@@ -45,7 +44,7 @@ export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ childre
         return prev
       })
     },
-    [setSelectedVirals]
+    [setSelectedVirals, selectedVirals]
   )
 
   return (

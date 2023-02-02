@@ -155,7 +155,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               }
             },
             {
-              name: 'Характер',
+              name: 'Локализация',
               type: AttributeType.Quality,
               data: {
                 availableValues: [
