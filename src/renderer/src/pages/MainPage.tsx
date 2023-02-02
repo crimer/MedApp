@@ -82,11 +82,11 @@ interface IComplexAttribute extends IAttribute {
 }
 const ComplexAttribute: React.FC<IComplexAttribute> = ({ viral, name }) => {
   return (
-    <>
+    <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
       {viral.characteristics.map((ch) => (
         <Characteristic item={ch} key={newGuid()} />
       ))}
-    </>
+    </div>
   )
 }
 

@@ -6,5 +6,5 @@ interface INumericTextField {
 }
 
 export const NumericTextField: React.FC<INumericTextField> = ({ title }) => {
-  return <TextField label={title} variant="outlined" />
+  return <TextField label={title} variant="outlined" fullWidth />
 }

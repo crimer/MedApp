@@ -1,8 +1,6 @@
-import { FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material'
-import { MenuItem } from 'electron'
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { newGuid } from '@renderer/utils/utils'
 import React from 'react'
-
-
 
 interface ISelectInput {
   title: string
@@ -11,15 +9,17 @@ interface ISelectInput {
 }
 
 export const SelectInputField: React.FC<ISelectInput> = ({ title, items, onChange }) => {
+  const id = `selectInput_${newGuid()}`
   return (
     <FormControl fullWidth>
-      <InputLabel id="selectInput">{title}</InputLabel>
-      {/* <Select labelId="selectInput" value={age} label={title} onChange={onChange}>
-        <MenuItem value="">None</MenuItem> */}
-        {/* {items.map((el) => (
-          <MenuItem value={el.value}>{el.name}</MenuItem>
-        ))} */}
-      {/* </Select> */}
+      <InputLabel id={id}>{title}</InputLabel>
+      <Select labelId={id} value={''} label={title} onChange={onChange}>
+        {items.map((el) => (
+          <MenuItem key={newGuid()} value={el}>
+            {el}
+          </MenuItem>
+        ))}
+      </Select>
     </FormControl>
   )
 }
