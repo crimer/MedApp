@@ -4,15 +4,14 @@ import { v4 as uuidv4 } from 'uuid'
 interface IViralListItem {
   name: string
   isChecked: boolean
-  value: object
-  onSelect: (value: object) => void
+  onSelect: () => void
 }
 
-export const ViralListItem: React.FC<IViralListItem> = ({ name, isChecked, onSelect, value }) => {
+export const ViralListItem: React.FC<IViralListItem> = ({ name, isChecked, onSelect }) => {
   const labelId = `checkbox-list-label-${uuidv4()}`
   return (
     <ListItem key={labelId} disablePadding dense>
-      <ListItemButton role={undefined} onClick={() => onSelect(value)}>
+      <ListItemButton role={undefined} onClick={onSelect}>
         <ListItemIcon>
           <Checkbox
             edge="start"

@@ -4,14 +4,16 @@ import Toolbar from '@mui/material/Toolbar'
 import List from '@mui/material/List'
 import { ViralListItem } from '@renderer/components/ViralListItem'
 import { ListSubheader } from '@mui/material'
-import { useContext } from 'react'
-import { AvailableViralView, ViralsDataContext } from '@renderer/context/ViralsDataContext'
+import { useCallback, useContext } from 'react'
+import { ViralsDataContext } from '@renderer/context/ViralsDataContext'
 import { v4 as uuidv4 } from 'uuid'
+import { AvailableViral } from '@renderer/data/AvailableVirals'
 
 const drawerWidth = 380
 
 export const ApplicationSideBar: React.FC = () => {
-  const { availableViralGroupViews, onSelectViralItem } = useContext(ViralsDataContext)
+  const { availableViralGroups, onSelectViralItem, onRemoveViralItem, selectedVirals } =
+    useContext(ViralsDataContext)
 
   return (
     <Drawer
@@ -24,12 +26,14 @@ export const ApplicationSideBar: React.FC = () => {
     >
       <Toolbar />
       <Box style={{ overflow: 'auto' }}>
-        {availableViralGroupViews.map((viralGroupView) => (
+        {availableViralGroups.map((viralGroup) => (
           <ViralItemsList
+            selectedVirals={selectedVirals}
             key={uuidv4()}
             onSelectViralItem={onSelectViralItem}
-            title={viralGroupView.name}
-            viralItems={viralGroupView.virals}
+            onRemoveViralItem={onRemoveViralItem}
+            title={viralGroup.name}
+            viralItems={viralGroup.virals}
           />
         ))}
       </Box>
@@ -39,11 +43,29 @@ export const ApplicationSideBar: React.FC = () => {
 
 interface IViralItemsList {
   title: string
-  viralItems: AvailableViralView[]
-  onSelectViralItem: (viralItem: AvailableViralView) => void
+  selectedVirals: AvailableViral[]
+  viralItems: AvailableViral[]
+  onSelectViralItem: (viralItem: AvailableViral) => void
+  onRemoveViralItem: (viralItem: AvailableViral) => void
 }
 
-const ViralItemsList: React.FC<IViralItemsList> = ({ title, viralItems, onSelectViralItem }) => {
+const ViralItemsList: React.FC<IViralItemsList> = ({
+  title,
+  viralItems,
+  onSelectViralItem,
+  onRemoveViralItem,
+  selectedVirals
+}) => {
+  const isExist = useCallback((viralItem: AvailableViral): boolean => {
+    const isExistElement = selectedVirals.find((el) => el.name === viralItem.name)
+    return isExistElement !== undefined
+  },[selectedVirals])
+
+  const onSelectItem = useCallback((viralItem: AvailableViral) => {
+    if (isExist(viralItem)) onRemoveViralItem(viralItem)
+    else onSelectViralItem(viralItem)
+  },[selectedVirals, onSelectViralItem, onRemoveViralItem])
+
   return (
     <List
       sx={{ width: '100%', maxWidth: drawerWidth }}
@@ -52,10 +74,9 @@ const ViralItemsList: React.FC<IViralItemsList> = ({ title, viralItems, onSelect
       {viralItems.map((viralItem) => (
         <ViralListItem
           key={uuidv4()}
-          isChecked={viralItem.isSelected}
+          isChecked={isExist(viralItem)}
           name={viralItem.name}
-          value={viralItem}
-          onSelect={() => onSelectViralItem(viralItem)}
+          onSelect={() => onSelectItem(viralItem)}
         />
       ))}
     </List>

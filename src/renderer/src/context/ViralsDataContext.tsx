@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useCallback } from 'react'
+import React, { createContext, PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import {
   AvailableViral,
   AvailableViralGroup,
@@ -6,62 +6,47 @@ import {
 } from '@renderer/data/AvailableVirals'
 
 interface IViralsDataContext {
-  availableViralGroupViews: AvailableViralGroupView[]
-  onSelectViralItem: (viralItem: AvailableViralView) => void
+  availableViralGroups: AvailableViralGroup[]
+  selectedVirals: AvailableViral[]
+  onSelectViralItem: (viralItem: AvailableViral) => void
+  onRemoveViralItem: (viralItem: AvailableViral) => void
 }
 
 export const ViralsDataContext = createContext<IViralsDataContext>({
-  availableViralGroupViews: [],
+  availableViralGroups: [],
+  selectedVirals: [],
   onSelectViralItem: () => {
+    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
+  },
+  onRemoveViralItem: () => {
     throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
   }
 })
 
 export type AvailableViralGroupView = {
-	name: string
-	virals: AvailableViralView[]
+  name: string
+  virals: AvailableViral[]
 }
-
-export type AvailableViralView = AvailableViral & {
-  isSelected: boolean
-}
-
-function convertViralGroups(
-  availableViralGroups: AvailableViralGroup[]
-): AvailableViralGroupView[] {
-  const viewGroups: AvailableViralGroupView[] = []
-
-  for (const group of availableViralGroups) {
-    const virals = convertVirals(group.virals)
-    viewGroups.push({
-      name: group.name,
-      virals
-    })
-  }
-
-  return viewGroups
-}
-
-function convertVirals(availableVirals: AvailableViral[]): AvailableViralView[] {
-  const viralViews: AvailableViralView[] = []
-
-  for (const viral of availableVirals) {
-    viralViews.push({
-      ...viral,
-      isSelected: false
-    })
-  }
-
-  return viralViews
-}
-
-const availableViralGroupViews = convertViralGroups(availableViralGroups)
 
 export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const onSelectViralItem = useCallback((viralItem: AvailableViralView) => {}, [])
+  const [selectedVirals, setSelectedVirals] = useState<AvailableViral[]>([])
+
+  const onSelectViralItem = useCallback((viralItem: AvailableViral) => {
+    console.log(viralItem.name)
+	setSelectedVirals(prev => [...prev, viralItem])
+  }, [setSelectedVirals])
+
+  const onRemoveViralItem = useCallback((viralItem: AvailableViral) => {
+    setSelectedVirals(prev => {
+		const isExist = prev.find(el => el.name === viralItem.name)
+		if(isExist)
+			return [...prev.filter(item => item.name !== viralItem.name)]
+		return prev
+	})
+  }, [setSelectedVirals])
 
   return (
-    <ViralsDataContext.Provider value={{ availableViralGroupViews, onSelectViralItem }}>
+    <ViralsDataContext.Provider value={{ availableViralGroups, onSelectViralItem, selectedVirals, onRemoveViralItem }}>
       {children}
     </ViralsDataContext.Provider>
   )
