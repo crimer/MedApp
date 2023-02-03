@@ -14,12 +14,15 @@ interface IComplexAttribute extends IAttribute {
   viral: ViralAttributeComplex
   changeNumericViral: (viralName: string, value: number) => void
   changeQualityViral: (viralName: string, value: string) => void
+  changeComplexViral: (viralName: string, value: string) => void
 }
+
 export const ComplexAttribute: React.FC<IComplexAttribute> = ({
   viral,
   name,
   changeNumericViral,
-  changeQualityViral
+  changeQualityViral,
+  changeComplexViral
 }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -27,6 +30,7 @@ export const ComplexAttribute: React.FC<IComplexAttribute> = ({
         <Characteristic
           item={ch}
           key={newGuid()}
+          changeComplexViral={changeComplexViral}
           changeNumericViral={changeNumericViral}
           changeQualityViral={changeQualityViral}
         />
@@ -39,6 +43,7 @@ interface ICharacteristic {
   item: ComplexCharacteristic
   changeNumericViral: (viralName: string, value: number) => void
   changeQualityViral: (viralName: string, value: string) => void
+  changeComplexViral: (viralName: string, value: string) => void
 }
 
 const Characteristic: React.FC<ICharacteristic> = ({
