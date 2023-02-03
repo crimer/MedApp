@@ -12,8 +12,7 @@ import { AvailableViral } from '@renderer/data/AvailableVirals'
 const drawerWidth = 380
 
 export const ApplicationSideBar: React.FC = () => {
-  const { availableViralGroups, onSelectViralItem, onRemoveViralItem, selectedVirals } =
-    useContext(ViralsDataContext)
+  const { availableViralGroups, onSelectViralItem, onRemoveViralItem, patientData } = useContext(ViralsDataContext)
 
   return (
     <Drawer
@@ -28,7 +27,7 @@ export const ApplicationSideBar: React.FC = () => {
       <Box style={{ overflow: 'auto' }}>
         {availableViralGroups.map((viralGroup) => (
           <ViralItemsList
-            selectedVirals={selectedVirals}
+            selectedVirals={patientData.virals}
             key={uuidv4()}
             onSelectViralItem={onSelectViralItem}
             onRemoveViralItem={onRemoveViralItem}

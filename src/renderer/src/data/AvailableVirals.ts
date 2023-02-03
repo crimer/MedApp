@@ -27,6 +27,7 @@ export type ComplexCharacteristic = {
 
 export type ViralAttributeQuality = {
   availableValues: string[]
+  selected: string
 }
 
 export type ViralAttributeNumeric = {
@@ -40,6 +41,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Боль в животе',
+
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -47,6 +49,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -54,6 +57,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Локализация',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: [
                   'собственно эпигастрий',
                   'правое подреберье',
@@ -71,6 +75,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Интенсивность',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['сильная', 'умеренная', 'слабая', 'резкая', 'резчайшая']
               }
             },
@@ -78,6 +83,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Усиление',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -85,6 +91,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Характер',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['острая', 'тупая', 'давящая', 'колющая', 'распирающая']
               }
             }
@@ -100,6 +107,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -107,6 +115,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Характер',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['Повышение аппетита', 'Снижение аппетита', 'Отсутствие аппетита']
               }
             }
@@ -122,6 +131,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -129,6 +139,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Характер',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: [
                   'снижение вкуса',
                   'потеря вкуса',
@@ -151,6 +162,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -158,6 +170,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Локализация',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: [
                   'левая подреберная область',
                   'правая подреберная область',
@@ -171,6 +184,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Рвота',
+
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -178,6 +192,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -185,6 +200,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Облегчение после рвоты',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -192,6 +208,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Частота',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['однократно', 'многократно', 'повторно']
               }
             }
@@ -202,6 +219,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Вздутие живота',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['имеется', 'отсутствует']
         }
       },
@@ -209,6 +227,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Тошнота',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['имеется', 'отсутствует']
         }
       },
@@ -216,6 +235,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Сухость во рту',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['имеется', 'отсутствует']
         }
       },
@@ -223,6 +243,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Недомогание',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['имеется', 'отсутствует', 'ухудшение состояния']
         }
       },
@@ -230,6 +251,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Общее состояние',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: [
             'удовлетворительное',
             'средней тяжести',
@@ -247,6 +269,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             }
@@ -262,6 +285,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -269,6 +293,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Выраженность',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: [
                   'умеренно выраженная',
                   'умеренная',
@@ -288,6 +313,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Толщина стенки желчного пузыря (УЗИ желчного пузыря)',
+
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'мм',
@@ -298,6 +324,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Структура стенки желчного пузыря (УЗИ желчного пузыря)',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['слоистая', 'неоднородная', 'смазанная', 'однородная']
         }
       },
@@ -305,6 +332,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Конкременты желчного пузыря (УЗИ желчного пузыря)',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['имеется', 'отсутствует']
         }
       }
@@ -317,6 +345,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Влажность языка',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['влажный', 'сухой', 'суховат']
         }
       },
@@ -328,7 +357,9 @@ export const availableViralGroups: AvailableViralGroup[] = [
             {
               name: 'Присутствие',
               type: AttributeType.Quality,
+
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             }
@@ -339,6 +370,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
         name: 'Цвет налета',
         attributeType: AttributeType.Quality,
         attributeData: {
+          selected: '',
           availableValues: ['желтый', 'белый']
         }
       },
@@ -351,6 +383,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -358,6 +391,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Локализация',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: [
                   'правое подреберье',
                   'верхний отдел живота',
@@ -371,6 +405,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Мягкость живота',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
@@ -378,6 +413,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Чуствительность',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['болезненный', 'умеренно болезненный', 'резко болезненный']
               }
             }
@@ -393,11 +429,13 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             },
             {
               name: 'Значение',
+
               type: AttributeType.Numeric,
               data: {
                 unit: 'С',
@@ -409,6 +447,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Симптом Щеткина-Блюмберга',
+
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -416,6 +455,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
               name: 'Присутствие',
               type: AttributeType.Quality,
               data: {
+                selected: '',
                 availableValues: ['имеется', 'отсутствует']
               }
             }
@@ -458,7 +498,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Гематокрит',
-         attributeType: AttributeType.Numeric,
+        attributeType: AttributeType.Numeric,
         attributeData: {
           unit: '%',
           value: 43.2
@@ -466,7 +506,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Гемоглобин',
-         attributeType: AttributeType.Numeric,
+        attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'г/л',
           value: 43.2
@@ -474,7 +514,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Лейкоциты в крови',
-         attributeType: AttributeType.Numeric,
+        attributeType: AttributeType.Numeric,
         attributeData: {
           unit: '10⁹/л',
           value: 9.9
@@ -482,7 +522,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'СОЭ',
-         attributeType: AttributeType.Numeric,
+        attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'мм/ч',
           value: 22.0

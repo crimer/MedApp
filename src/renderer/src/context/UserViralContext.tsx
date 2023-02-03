@@ -1,4 +1,4 @@
-import { InfoModal } from '@renderer/components/InfoModal'
+import { InfoModal } from '@renderer/components/dialogs/InfoModal'
 import { useDialogHook } from '@renderer/hook/useDualogHook'
 import { IacpaasResponse } from '@renderer/repository/dto/IacpaasResponse'
 import { ImportDataAsync } from '@renderer/repository/IacpaasRepository'

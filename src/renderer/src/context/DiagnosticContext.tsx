@@ -1,4 +1,4 @@
-import { InfoModal } from '@renderer/components/InfoModal'
+import { InfoModal } from '@renderer/components/dialogs/InfoModal'
 import { RunServiceAsync } from '@renderer/repository/IacpaasRepository'
 import React, { createContext, PropsWithChildren, useCallback } from 'react'
 import { useMutation } from 'react-query'
