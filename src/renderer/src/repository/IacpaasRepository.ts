@@ -1,4 +1,6 @@
+import { DataSuccessorRoot } from '@renderer/data/DataSuccessor'
 import { IacpaasResponse } from './dto/IacpaasResponse'
+import { InfoResourceDto } from './dto/InfoResourceDto'
 
 type ImportDto = {
   path: string
@@ -6,10 +8,14 @@ type ImportDto = {
   clearIfExists: boolean
 }
 
+const baseAddress = 'https://iacpaas.dvo.ru'
+const getHeaders = () => ({'X-API-KEY': '6cf60d216c5b1b32ebfbbb5492c5a1b7'})
+
 export const ImportDataAsync = async (dto: ImportDto): Promise<IacpaasResponse> => {
-  const response = await fetch('https://iacpaas.dvo.ru/api/data/import', {
+  const response = await fetch(`${baseAddress}/api/data/import`, {
     body: JSON.stringify(dto),
-    method: 'POST'
+    method: 'POST',
+    headers: getHeaders()
   })
   const data = await response.json()
   return data as IacpaasResponse
@@ -22,19 +28,20 @@ type ExportDto = {
   ['export-depth']: string
 }
 
-export const ExportDataAsync = async (dto: ExportDto): Promise<IacpaasResponse> => {
-  const response = await fetch('https://iacpaas.dvo.ru/api/data/export/user-item', {
-    body: JSON.stringify(dto),
-    method: 'POST'
+export const ExportDataAsync = async (dto: ExportDto): Promise<DataSuccessorRoot> => {
+  const response = await fetch(`${baseAddress}/api/data/export/user-item${buildGetParams(dto)}`, {
+    method: 'GET',
+    headers: getHeaders()
   })
-  const data = await response.json()
-  return data as IacpaasResponse
+  const infoResourceDto = await response.json() as InfoResourceDto
+  return JSON.parse(infoResourceDto.data) as DataSuccessorRoot
 }
 
 type RunServiceDto = IacpaasResponse & { runningServiceId: boolean }
 export const RunServiceAsync = async (id: string): Promise<RunServiceDto> => {
-  const response = await fetch(`https://iacpaas.dvo.ru/api/service/run/${id}`, {
-    method: 'GET'
+  const response = await fetch(`${baseAddress}/api/service/run/${id}`, {
+    method: 'GET',
+    headers: getHeaders()
   })
   const data = await response.json()
   return data as RunServiceDto
@@ -43,9 +50,18 @@ export const RunServiceAsync = async (id: string): Promise<RunServiceDto> => {
 type IsServiceRunningDto = IacpaasResponse & { running: boolean }
 
 export const IsServiceRunningAsync = async (id: string): Promise<IsServiceRunningDto> => {
-  const response = await fetch(`https://iacpaas.dvo.ru/api/service/${id}/running`, {
-    method: 'GET'
+  const response = await fetch(`${baseAddress}/api/service/${id}/running`, {
+    method: 'GET',
+    headers: getHeaders()
   })
   const data = await response.json()
   return data as IsServiceRunningDto
+}
+
+
+export const buildGetParams = (params: object): string => {
+	const paramsString = Object.entries(params)
+		.map((param) => param.map((el) => el).join('='))
+		.join('&')
+	return `?${paramsString}`
 }
