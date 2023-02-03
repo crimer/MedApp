@@ -4,7 +4,7 @@ import {
   AvailableViralGroup,
   availableViralGroups
 } from '@renderer/data/AvailableVirals'
-import { initData, PatientData, useViralStore } from '@renderer/data/useViralStore'
+import { initData, PatientData, useViralStore } from '@renderer/hook/useViralStore'
 
 export type ChangePatientDataProps = {
   nationality?: string
@@ -18,6 +18,11 @@ interface IViralsDataContext {
   patientData: PatientData
   changeNumericViral: (viralName: string, value: number) => void
   changeQualityViral: (viralName: string, value: string) => void
+  changeComplexViral: (
+    viralName: string,
+    characteristicName: string,
+    newValue: string | number
+  ) => void
   onClear: () => void
   onSelectViralItem: (viralItem: AvailableViral) => void
   onRemoveViralItem: (viralItem: AvailableViral) => void
@@ -44,6 +49,9 @@ export const ViralsDataContext = createContext<IViralsDataContext>({
   },
   changeQualityViral: () => {
     throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
+  },
+  changeComplexViral: () => {
+    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
   }
 })
 
@@ -69,7 +77,7 @@ export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ childre
 
   const changeNumericViral = useCallback(
     (viralName: string, value: number) => {
-      dispatch({ type: 'changeNumericViral', payload: {viralName, value} })
+      dispatch({ type: 'changeNumericViral', payload: { viralName, value } })
     },
     [dispatch]
   )
@@ -80,17 +88,22 @@ export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ childre
     [dispatch]
   )
 
-  // const changeComplexViral = useCallback(
-  //   ({ nationality, sex, year, yearUnit }: ChangePatientDataProps) =>
-  //     dispatch({ type: 'changePatientInfo', payload: { nationality, sex, year, yearUnit } }),
-  //   []
-  // )
+  const changeComplexViral = useCallback(
+    (viralName: string, characteristicName: string, newValue: string | number) => {
+      dispatch({
+        type: 'changeComplexViral',
+        payload: { viralName, characteristicName, newValue }
+      })
+    },
+    [dispatch]
+  )
 
   useEffect(() => console.log(state), [state])
 
   return (
     <ViralsDataContext.Provider
       value={{
+        changeComplexViral,
         changeQualityViral,
         changeNumericViral,
         changePatientInfo,

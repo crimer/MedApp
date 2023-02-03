@@ -1,6 +1,6 @@
 import { Box, TextField } from '@mui/material'
 import { ChangePatientDataProps } from '@renderer/context/ViralsDataContext'
-import { PatientInfo } from '@renderer/data/useViralStore'
+import { PatientInfo } from '@renderer/hook/useViralStore'
 import { NumericTextField } from './NumericTextField'
 import { SelectInputField } from './SelectInputField'
 import { ViralCard } from './ViralCard'

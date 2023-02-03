@@ -15,12 +15,18 @@ export interface IViralElementBuilder {
   viral: AvailableViral
   changeNumericViral: (viralName: string, value: number) => void
   changeQualityViral: (viralName: string, value: string) => void
+  changeComplexViral: (
+    viralName: string,
+    characteristicName: string,
+    newValue: string | number
+  ) => void
 }
 
 export const ViralElementBuilder: React.FC<IViralElementBuilder> = ({
   viral,
   changeNumericViral,
-  changeQualityViral
+  changeQualityViral,
+  changeComplexViral
 }) => {
   return (
     <>
@@ -45,8 +51,7 @@ export const ViralElementBuilder: React.FC<IViralElementBuilder> = ({
           key={newGuid()}
           name={viral.name}
           viral={viral.attributeData as ViralAttributeComplex}
-          changeNumericViral={changeNumericViral}
-          changeQualityViral={changeQualityViral}
+          changeComplexViral={changeComplexViral}
         />
       )}
     </>

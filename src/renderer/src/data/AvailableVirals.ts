@@ -41,7 +41,6 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Боль в животе',
-
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [

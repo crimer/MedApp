@@ -1,5 +1,11 @@
 import { useReducer } from 'react'
-import { AvailableViral, ViralAttributeNumeric, ViralAttributeQuality } from './AvailableVirals'
+import {
+  AttributeType,
+  AvailableViral,
+  ViralAttributeComplex,
+  ViralAttributeNumeric,
+  ViralAttributeQuality
+} from '../data/AvailableVirals'
 
 type Action =
   | {
@@ -16,7 +22,14 @@ type Action =
   | { type: 'clearAll' }
   | { type: 'changeNumericViral'; payload: { viralName: string; value: number } }
   | { type: 'changeQualityViral'; payload: { viralName: string; value: string } }
-  | { type: 'changeComplexViral' }
+  | {
+      type: 'changeComplexViral'
+      payload: {
+        viralName: string
+        characteristicName: string
+        newValue: string | number
+      }
+    }
 
 export type PatientInfo = {
   nationality: string
@@ -84,6 +97,28 @@ function reduce(state: PatientData, action: Action): PatientData {
           ...state,
           virals: [...state.virals.filter((item) => item.name !== action.payload.name)]
         }
+      return state
+    }
+
+    case 'changeComplexViral': {
+      const viralElement = state.virals.find((el) => el.name === action.payload.viralName)
+      if (!viralElement) return state
+
+      const complex = viralElement.attributeData as ViralAttributeComplex
+      const characteristic = complex.characteristics.find((el) => el.name === action.payload.characteristicName)
+      
+      if(characteristic?.type === AttributeType.Numeric){
+        const numeric = characteristic.data as ViralAttributeNumeric
+        numeric.value = +action.payload.newValue
+        return {...state}
+      }
+
+      if(characteristic?.type === AttributeType.Quality){
+        const quality = characteristic.data as ViralAttributeQuality
+        quality.selected = action.payload.newValue.toString()
+        return {...state}
+      }
+
       return state
     }
 

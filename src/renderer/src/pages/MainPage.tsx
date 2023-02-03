@@ -6,7 +6,7 @@ import { newGuid } from '@renderer/utils/utils'
 import { PacientInfoForm } from '@renderer/components/shared/PacientDataForm'
 
 export const MainPage: React.FC = () => {
-  const { patientData, changePatientInfo, changeNumericViral, changeQualityViral } = useContext(ViralsDataContext)
+  const { patientData, changePatientInfo, changeNumericViral, changeQualityViral, changeComplexViral } = useContext(ViralsDataContext)
   
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
@@ -17,6 +17,7 @@ export const MainPage: React.FC = () => {
             viral={el}
             changeNumericViral={changeNumericViral}
             changeQualityViral={changeQualityViral}
+            changeComplexViral={changeComplexViral}
           />
         </ViralCard>
       ))}
