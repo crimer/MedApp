@@ -3,6 +3,5 @@ export type IacpaasResponse = {
   explanation: string
   success: boolean
   platformUnavailable: boolean
-  code: string
   explanationSafe: string
 }

@@ -6,8 +6,17 @@ export type AvailableViralGroup = {
 export type AvailableViral = {
   name: string
   attributeType: AttributeType
+  attributeSection: AttributeSection
   attributeData: ViralAttributeComplex | ViralAttributeNumeric | ViralAttributeQuality
 }
+
+export type AttributeSection =
+  | 'Паспортная часть'
+  | 'Жалобы'
+  | 'Объективное состояние больного'
+  | 'Биохимический анализ крови'
+  | 'Клинический анализ крови'
+  | 'Инструментальные исследования'
 
 export enum AttributeType {
   Numeric = 0,
@@ -41,6 +50,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Боль в животе',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -99,6 +109,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Нарушение аппетита',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -123,6 +134,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Нарушение вкуса',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -154,6 +166,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Тяжесть в животе',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -183,7 +196,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Рвота',
-
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -216,6 +229,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Вздутие живота',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -224,6 +238,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Тошнота',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -232,6 +247,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Сухость во рту',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -240,6 +256,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Недомогание',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -248,6 +265,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Общее состояние',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -261,6 +279,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Озноб',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -277,6 +296,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Общая слабость',
+        attributeSection: 'Жалобы',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -312,7 +332,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Толщина стенки желчного пузыря (УЗИ желчного пузыря)',
-
+        attributeSection: 'Инструментальные исследования',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'мм',
@@ -321,6 +341,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Структура стенки желчного пузыря (УЗИ желчного пузыря)',
+        attributeSection: 'Инструментальные исследования',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -329,6 +350,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Конкременты желчного пузыря (УЗИ желчного пузыря)',
+        attributeSection: 'Инструментальные исследования',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -342,6 +364,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Влажность языка',
+        attributeSection: 'Объективное состояние больного',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -350,6 +373,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Обложенность языка',
+        attributeSection: 'Объективное состояние больного',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -367,6 +391,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Цвет налета',
+        attributeSection: 'Объективное состояние больного',
         attributeType: AttributeType.Quality,
         attributeData: {
           selected: '',
@@ -375,6 +400,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Болезненность живота при поверхностной пальпации (качественные)',
+        attributeSection: 'Объективное состояние больного',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -421,6 +447,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Температура тела',
+        attributeSection: 'Объективное состояние больного',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -446,7 +473,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Симптом Щеткина-Блюмберга',
-
+        attributeSection: 'Объективное состояние больного',
         attributeType: AttributeType.Complex,
         attributeData: {
           characteristics: [
@@ -468,6 +495,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Белок общий в сыворотке',
+        attributeSection: 'Биохимический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'г/л',
@@ -476,6 +504,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Билирубин общий',
+        attributeSection: 'Биохимический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'мкмоль/л',
@@ -484,6 +513,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Фосфатаза щелочная',
+        attributeSection: 'Биохимический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'Ед/л',
@@ -497,6 +527,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
     virals: [
       {
         name: 'Гематокрит',
+        attributeSection: 'Клинический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: '%',
@@ -505,6 +536,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Гемоглобин',
+        attributeSection: 'Клинический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'г/л',
@@ -513,6 +545,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'Лейкоциты в крови',
+        attributeSection: 'Клинический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: '10⁹/л',
@@ -521,6 +554,7 @@ export const availableViralGroups: AvailableViralGroup[] = [
       },
       {
         name: 'СОЭ',
+        attributeSection: 'Клинический анализ крови',
         attributeType: AttributeType.Numeric,
         attributeData: {
           unit: 'мм/ч',

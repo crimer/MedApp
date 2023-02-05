@@ -98,8 +98,6 @@ export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ childre
     [dispatch]
   )
 
-  useEffect(() => console.log(state), [state])
-
   return (
     <ViralsDataContext.Provider
       value={{

@@ -9,13 +9,13 @@ import { UserViralContext } from '@renderer/context/UserViralContext'
 
 export const ApplicationBar: React.FC = () => {
   const { startDiagnosticAsync } = useContext(DiagnosticContext)
-  const { importDataAsync } = useContext(UserViralContext)
+  const { handleSaveDataAsync } = useContext(UserViralContext)
   const { onClear } = useContext(ViralsDataContext)
 
   const startAsync = useCallback(async () => {
-    await importDataAsync()
+    await handleSaveDataAsync()
     // await startDiagnosticAsync()
-  }, [importDataAsync])
+  }, [handleSaveDataAsync])
 
   return (
     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>

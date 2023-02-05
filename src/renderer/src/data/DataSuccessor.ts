@@ -8,14 +8,14 @@ export interface DataSuccessorRoot extends DataSuccessor {
   ontology: string
 }
 export interface DataSuccessor {
-  name: string
-  type: string
-  valtype: string
-  value: unknown
-  original: string
-  link: string
-  successors: DataSuccessor[]
-  meta: string
+  name?: string
+  type?: string
+  valtype?: string
+  value?: unknown
+  original?: string
+  link?: string
+  successors?: DataSuccessor[]
+  meta?: string
 }
 
 export const ValueTypes = {

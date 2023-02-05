@@ -1,50 +1,55 @@
-import { InfoModal } from '@renderer/components/dialogs/InfoModal'
+import { PrepareSuccessorBuilder } from '@renderer/data/PrepareSuccessorBuilder'
 import { ExportDataAsync, ImportDataAsync } from '@renderer/repository/IacpaasRepository'
 import React, { createContext, PropsWithChildren, useCallback, useContext } from 'react'
-import { useMutation } from 'react-query'
 import { SnackbarContext } from './SnackbarContext'
+import { ViralsDataContext } from './ViralsDataContext'
 
 interface IUserViralContext {
-  importDataAsync: () => Promise<void>
+  handleSaveDataAsync: () => Promise<void>
 }
 
 export const UserViralContext = createContext<IUserViralContext>({
-  importDataAsync: () => {
+  handleSaveDataAsync: () => {
     throw new Error('Не удалось инициализировать контекст истории болезни пациента')
   }
 })
 
 export const UserViralContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { openSnackbar } = useContext(SnackbarContext)
+  const { patientData } = useContext(ViralsDataContext)
 
-  const importDataMutation = useMutation(
-    async () => await ImportDataAsync({ clearIfExists: false, json: '', path: '' }),
-    {
-      onError: (error, variables, context) => {}
-    }
-  )
+  const handleSaveDataAsync = useCallback(async () => {
+    try {
+      const newViral = PrepareSuccessorBuilder.Build(patientData)
 
-  const getDataMutation = useMutation(
-    async () =>
-      await ExportDataAsync({
+      const medArchive = await ExportDataAsync({
         path: 'Сервис диагностики (без интерфейса, с заменяемой БЗ)/Архив Историй MedIACP',
         'export-depth': '1',
         'json-type': 'universal',
         'start-target-concept-path': '/'
-      }),
-    {
-      onError: (error, variables, context) => {
-        openSnackbar(`Ошибка получения данных 'Архив Историй MedIACP': ${error}`, 'error')
-      }
-    }
-  )
+      })
 
-  const importDataAsync = useCallback(async () => {
-    const result = await getDataMutation.mutateAsync()
-    const t = result.date
-  }, [])
+      if (!medArchive) return
+
+      medArchive.successors = [newViral]
+      const jsonData = JSON.stringify(medArchive)
+
+      const importResult = await ImportDataAsync(medArchive.path, jsonData, false)
+
+      if (!importResult || !importResult.success) {
+        const error = importResult?.error ?? importResult?.explanation ?? 'Получены пустые данные с платформы'
+        openSnackbar(`Не удалось импортировать созданную историю болезни: ${error}`, 'warning')
+        return
+      }
+      openSnackbar(`Получены пустые данные 'Архив Историй MedIACP'`, 'warning')
+    } catch (error) {
+      openSnackbar(`Ошибка сохранения данных: ${error}`, 'error')
+    }
+  }, [openSnackbar, patientData])
 
   return (
-    <UserViralContext.Provider value={{ importDataAsync }}>{children}</UserViralContext.Provider>
+    <UserViralContext.Provider value={{ handleSaveDataAsync }}>
+      {children}
+    </UserViralContext.Provider>
   )
 }
