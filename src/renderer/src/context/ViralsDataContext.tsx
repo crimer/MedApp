@@ -1,118 +1,128 @@
-import React, { createContext, PropsWithChildren, useCallback, useEffect } from 'react'
+import React, {
+	createContext,
+	PropsWithChildren,
+	useCallback,
+	useState,
+} from 'react'
 import {
-  AvailableViral,
-  AvailableViralGroup,
-  availableViralGroups
+	AvailableViral,
+	AvailableViralGroup,
+	availableViralGroups,
 } from '@renderer/data/AvailableVirals'
-import { initData, PatientData, useViralStore } from '@renderer/hook/useViralStore'
 
 export type ChangePatientDataProps = {
-  nationality?: string
-  sex?: string
-  yearUnit?: string
-  year?: number
+	nationality?: string
+	sex?: string
+	yearUnit?: string
+	year?: number
 }
 
 interface IViralsDataContext {
-  availableViralGroups: AvailableViralGroup[]
-  patientData: PatientData
-  changeNumericViral: (viralName: string, value: number) => void
-  changeQualityViral: (viralName: string, value: string) => void
-  changeComplexViral: (
-    viralName: string,
-    characteristicName: string,
-    newValue: string | number
-  ) => void
-  onClear: () => void
-  onSelectViralItem: (viralItem: AvailableViral) => void
-  onRemoveViralItem: (viralItem: AvailableViral) => void
-  changePatientInfo: (data: ChangePatientDataProps) => void
+	availableViralGroups: AvailableViralGroup[]
+	selectedVirals: AvailableViral[]
+	patientInfo: PatientInfo,
+	onClear: () => void
+	onSelectViralItem: (viralItem: AvailableViral) => void
+	onRemoveViralItem: (viralItem: AvailableViral) => void
+	setPatientData: (data: Partial<PatientInfo>) => void
+}
+
+export type PatientInfo = {
+	nationality: string
+	sex: string
+	year: number
+	yearUnit: string
+}
+
+export const sexValues = ['мужской', 'женский']
+export const yearUnitValues = ['год', 'месяц', 'неделя', 'день']
+
+export const pacientInfoInit: PatientInfo = {
+	nationality: 'Русский',
+	sex: sexValues[0],
+	year: 30,
+	yearUnit: yearUnitValues[0],
 }
 
 export const ViralsDataContext = createContext<IViralsDataContext>({
-  availableViralGroups: [],
-  patientData: initData,
-  onSelectViralItem: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  },
-  onRemoveViralItem: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  },
-  onClear: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  },
-  changePatientInfo: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  },
-  changeNumericViral: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  },
-  changeQualityViral: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  },
-  changeComplexViral: () => {
-    throw new Error('Не удалось инициализировать контекст данных о заболеваниях')
-  }
+	availableViralGroups: [],
+	selectedVirals: [],
+	patientInfo: pacientInfoInit,
+	onSelectViralItem: () => {
+		throw new Error(
+			'Не удалось инициализировать контекст данных о заболеваниях'
+		)
+	},
+	onRemoveViralItem: () => {
+		throw new Error(
+			'Не удалось инициализировать контекст данных о заболеваниях'
+		)
+	},
+	onClear: () => {
+		throw new Error(
+			'Не удалось инициализировать контекст данных о заболеваниях'
+		)
+	},
+	setPatientData: () => {
+		throw new Error(
+			'Не удалось инициализировать контекст данных о заболеваниях'
+		)
+	},
 })
 
-export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { dispatch, state } = useViralStore()
+export const ViralsDataContextProvider: React.FC<PropsWithChildren> = ({
+	children,
+}) => {
+	const [selectedVirals, setSelectedVirals] = useState<AvailableViral[]>([])
+	const [patientInfo, setPatientInfo] = useState<PatientInfo>(pacientInfoInit)
 
-  const onSelectViralItem = useCallback(
-    (viralItem: AvailableViral) => dispatch({ type: 'addViral', payload: viralItem }),
-    [dispatch]
-  )
-  const onRemoveViralItem = useCallback(
-    (viralItem: AvailableViral) => dispatch({ type: 'removeViral', payload: viralItem }),
-    [dispatch]
-  )
+	const onSelectViralItem = useCallback(
+		(viralItem: AvailableViral) => {
+			setSelectedVirals((prev) => [...prev, viralItem])
+		},
+		[setSelectedVirals]
+	)
+	const onRemoveViralItem = useCallback(
+		(viralItem: AvailableViral) =>
+			setSelectedVirals((prev) => [
+				...prev.filter((item) => item.name !== viralItem.name),
+			]),
+		[setSelectedVirals]
+	)
 
-  const onClear = useCallback(() => dispatch({ type: 'clearAll' }), [dispatch])
+	const onClear = useCallback(
+		() => {
+			setSelectedVirals([])
+			setPatientInfo(pacientInfoInit)
+		},
+		[setSelectedVirals,setPatientInfo]
+	)
 
-  const changePatientInfo = useCallback(
-    ({ nationality, sex, year, yearUnit }: ChangePatientDataProps) =>
-      dispatch({ type: 'changePatientInfo', payload: { nationality, sex, year, yearUnit } }),
-    [dispatch]
-  )
+	const setPatientData = useCallback(
+		({ nationality, sex, year, yearUnit }: Partial<PatientInfo>) => {
+			setPatientInfo((prev) => ({
+				...prev,
+				nationality: nationality ?? prev.nationality,
+				sex: sex ?? prev.sex,
+				yearUnit: yearUnit ?? prev.yearUnit,
+				year: year ?? prev.year,
+			}))
+		},
+		[setSelectedVirals]
+	)
 
-  const changeNumericViral = useCallback(
-    (viralName: string, value: number) => {
-      dispatch({ type: 'changeNumericViral', payload: { viralName, value } })
-    },
-    [dispatch]
-  )
-
-  const changeQualityViral = useCallback(
-    (viralName: string, value: string) =>
-      dispatch({ type: 'changeQualityViral', payload: { viralName, value } }),
-    [dispatch]
-  )
-
-  const changeComplexViral = useCallback(
-    (viralName: string, characteristicName: string, newValue: string | number) => {
-      dispatch({
-        type: 'changeComplexViral',
-        payload: { viralName, characteristicName, newValue }
-      })
-    },
-    [dispatch]
-  )
-
-  return (
-    <ViralsDataContext.Provider
-      value={{
-        changeComplexViral,
-        changeQualityViral,
-        changeNumericViral,
-        changePatientInfo,
-        availableViralGroups,
-        onClear,
-        onSelectViralItem,
-        patientData: state,
-        onRemoveViralItem
-      }}
-    >
-      {children}
-    </ViralsDataContext.Provider>
-  )
+	return (
+		<ViralsDataContext.Provider
+			value={{
+				availableViralGroups,
+				patientInfo,
+				onClear,
+				onSelectViralItem,
+				onRemoveViralItem,
+				selectedVirals,
+				setPatientData,
+			}}>
+			{children}
+		</ViralsDataContext.Provider>
+	)
 }

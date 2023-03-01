@@ -36,11 +36,7 @@ export const ImportDataAsync = async (
   clearIfExist = false
 ): Promise<IacpaasResponse> => {
   const response = await fetch(`${baseAddress}/api/data/import`, {
-    body: JSON.stringify({
-      path: BuildPath(path),
-      json,
-      clearIfExist
-    }),
+    body: JSON.stringify({ path, json, clearIfExist }),
     method: 'POST',
     headers: {
       ...getHeaders()

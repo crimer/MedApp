@@ -1,59 +1,54 @@
 import {
-  AttributeType,
-  AvailableViral,
-  ViralAttributeComplex,
-  ViralAttributeNumeric,
-  ViralAttributeQuality
+	AttributeType,
+	AvailableViral,
+	ViralAttributeComplex,
+	ViralAttributeNumeric,
+	ViralAttributeQuality,
 } from '@renderer/data/AvailableVirals'
-import { newGuid } from '@renderer/utils/utils'
+import { ViralDataStore } from '@renderer/data/ViralStore'
 import React from 'react'
 import { ComplexAttribute } from './viralElements/ComplexAttribute'
 import { NumericAttribute } from './viralElements/NumericAttribute'
 import { QuantityAttribute } from './viralElements/QuantityAttribute'
 
 export interface IViralElementBuilder {
-  viral: AvailableViral
-  changeNumericViral: (viralName: string, value: number) => void
-  changeQualityViral: (viralName: string, value: string) => void
-  changeComplexViral: (
-    viralName: string,
-    characteristicName: string,
-    newValue: string | number
-  ) => void
+	viral: AvailableViral
 }
 
-export const ViralElementBuilder: React.FC<IViralElementBuilder> = ({
-  viral,
-  changeNumericViral,
-  changeQualityViral,
-  changeComplexViral
-}) => {
-  return (
-    <>
-      {viral.attributeType === AttributeType.Numeric && (
-        <NumericAttribute
-          key={newGuid()}
-          name={viral.name}
-          viral={viral.attributeData as ViralAttributeNumeric}
-          changeNumericViral={changeNumericViral}
-        />
-      )}
-      {viral.attributeType === AttributeType.Quality && (
-        <QuantityAttribute
-          key={newGuid()}
-          name={viral.name}
-          viral={viral.attributeData as ViralAttributeQuality}
-          changeQualityViral={changeQualityViral}
-        />
-      )}
-      {viral.attributeType === AttributeType.Complex && (
-        <ComplexAttribute
-          key={newGuid()}
-          name={viral.name}
-          viral={viral.attributeData as ViralAttributeComplex}
-          changeComplexViral={changeComplexViral}
-        />
-      )}
-    </>
-  )
+const ViralElementBuilderImpl: React.FC<IViralElementBuilder> = ({ viral }) => {
+	return (
+		<>
+			{viral.attributeType === AttributeType.Numeric && (
+				<NumericAttribute
+					name={viral.name}
+					viral={viral.attributeData as ViralAttributeNumeric}
+					onChange={(newValue) =>
+						ViralDataStore.Instance.changeNumericViral(
+							viral.name,
+							newValue
+						)
+					}
+				/>
+			)}
+			{viral.attributeType === AttributeType.Quality && (
+				<QuantityAttribute
+					name={viral.name}
+					viral={viral.attributeData as ViralAttributeQuality}
+					onChange={(newValue) =>
+						ViralDataStore.Instance.changeQuantityViral(
+							viral.name,
+							newValue
+						)
+					}
+				/>
+			)}
+			{viral.attributeType === AttributeType.Complex && (
+				<ComplexAttribute
+					name={viral.name}
+					viral={viral.attributeData as ViralAttributeComplex}
+				/>
+			)}
+		</>
+	)
 }
+export const ViralElementBuilder = React.memo(ViralElementBuilderImpl)

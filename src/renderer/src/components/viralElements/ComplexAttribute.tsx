@@ -1,10 +1,11 @@
 import {
-  AttributeType,
-  ComplexCharacteristic,
-  ViralAttributeComplex,
-  ViralAttributeNumeric,
-  ViralAttributeQuality
+	AttributeType,
+	ComplexCharacteristic,
+	ViralAttributeComplex,
+	ViralAttributeNumeric,
+	ViralAttributeQuality,
 } from '@renderer/data/AvailableVirals'
+import { ViralDataStore } from '@renderer/data/ViralStore'
 import { newGuid } from '@renderer/utils/utils'
 import React from 'react'
 import { NumericAttribute } from './NumericAttribute'
@@ -12,72 +13,57 @@ import { QuantityAttribute } from './QuantityAttribute'
 import { IAttribute } from './ViralTypes'
 
 interface IComplexAttribute extends IAttribute {
-  viral: ViralAttributeComplex
-  changeComplexViral: (
-    viralName: string,
-    characteristicName: string,
-    newValue: string | number
-  ) => void
+	viral: ViralAttributeComplex
 }
 
-const ComplexAttributeImpl: React.FC<IComplexAttribute> = ({
-  viral,
-  name,
-  changeComplexViral
-}) => {
-  const changeQualityViral = (characteristicName: string, value: string) => {
-    changeComplexViral(name, characteristicName, value)
-  }
-
-  const changeNumericViral = (characteristicName: string, value: number) => {
-    changeComplexViral(name, characteristicName, value)
-  }
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {viral.characteristics.map((ch) => (
-        <Characteristic
-          item={ch}
-          key={newGuid()}
-          changeNumericViral={changeNumericViral}
-          changeQualityViral={changeQualityViral}
-        />
-      ))}
-    </div>
-  )
+const ComplexAttributeImpl: React.FC<IComplexAttribute> = ({ viral, name }) => {
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+			{viral.characteristics.map((ch) => (
+				<Characteristic viralName={name} item={ch} key={newGuid()} />
+			))}
+		</div>
+	)
 }
 
 export const ComplexAttribute = React.memo(ComplexAttributeImpl)
 
 interface ICharacteristic {
-  item: ComplexCharacteristic
-  changeNumericViral: (viralName: string, value: number) => void
-  changeQualityViral: (viralName: string, value: string) => void
+	item: ComplexCharacteristic
+	viralName: string
 }
 
-const Characteristic: React.FC<ICharacteristic> = ({
-  item,
-  changeNumericViral,
-  changeQualityViral
-}) => {
-  return (
-    <>
-      {item.type === AttributeType.Numeric && (
-        <NumericAttribute
-          key={newGuid()}
-          name={item.name}
-          viral={item.data as ViralAttributeNumeric}
-          changeNumericViral={changeNumericViral}
-        />
-      )}
-      {item.type === AttributeType.Quality && (
-        <QuantityAttribute
-          key={newGuid()}
-          name={item.name}
-          viral={item.data as ViralAttributeQuality}
-          changeQualityViral={changeQualityViral}
-        />
-      )}
-    </>
-  )
+const Characteristic: React.FC<ICharacteristic> = ({ item, viralName }) => {
+	return (
+		<>
+			{item.type === AttributeType.Numeric && (
+				<NumericAttribute
+					key={newGuid()}
+					name={item.name}
+					viral={item.data as ViralAttributeNumeric}
+					onChange={(newValue) =>
+						ViralDataStore.Instance.changeComplexViral(
+							viralName,
+							item.name,
+							newValue
+						)
+					}
+				/>
+			)}
+			{item.type === AttributeType.Quality && (
+				<QuantityAttribute
+					key={newGuid()}
+					name={item.name}
+					viral={item.data as ViralAttributeQuality}
+					onChange={(newValue) =>
+						ViralDataStore.Instance.changeComplexViral(
+							viralName,
+							item.name,
+							newValue
+						)
+					}
+				/>
+			)}
+		</>
+	)
 }

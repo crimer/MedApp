@@ -33,9 +33,7 @@ export const DiagnosticContextProvider: React.FC<PropsWithChildren> = ({ childre
   }, [])
 
   return (
-    <DiagnosticContext.Provider
-      value={{ startDiagnosticAsync, isDiagnostic: runServiceMutation.isLoading }}
-    >
+    <DiagnosticContext.Provider value={{ startDiagnosticAsync, isDiagnostic: runServiceMutation.isLoading }}>
       <>
         <InfoModal
           isOpen={runServiceMutation.isError}

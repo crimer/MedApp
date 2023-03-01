@@ -8,82 +8,103 @@ import { useCallback, useContext } from 'react'
 import { ViralsDataContext } from '@renderer/context/ViralsDataContext'
 import { v4 as uuidv4 } from 'uuid'
 import { AvailableViral } from '@renderer/data/AvailableVirals'
+import { ViralDataStore } from '@renderer/data/ViralStore'
 
 const drawerWidth = 380
 
 export const ApplicationSideBar: React.FC = () => {
-  const { availableViralGroups, onSelectViralItem, onRemoveViralItem, patientData } = useContext(ViralsDataContext)
+	const {
+		availableViralGroups,
+		onSelectViralItem,
+		onRemoveViralItem,
+		selectedVirals,
+	} = useContext(ViralsDataContext)
 
-  return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
-      }}
-    >
-      <Toolbar />
-      <Box style={{ overflow: 'auto' }}>
-        {availableViralGroups.map((viralGroup) => (
-          <ViralItemsList
-            selectedVirals={patientData.virals}
-            key={uuidv4()}
-            onSelectViralItem={onSelectViralItem}
-            onRemoveViralItem={onRemoveViralItem}
-            title={viralGroup.name}
-            viralItems={viralGroup.virals}
-          />
-        ))}
-      </Box>
-    </Drawer>
-  )
+	return (
+		<Drawer
+			variant='permanent'
+			sx={{
+				width: drawerWidth,
+				flexShrink: 0,
+				[`& .MuiDrawer-paper`]: {
+					width: drawerWidth,
+					boxSizing: 'border-box',
+				},
+			}}>
+			<Toolbar />
+			<Box style={{ overflow: 'auto' }}>
+				{availableViralGroups.map((viralGroup) => (
+					<ViralItemsList
+						selectedVirals={selectedVirals}
+						key={uuidv4()}
+						title={viralGroup.name}
+						viralItems={viralGroup.virals}
+						onRemoveViralItem={onRemoveViralItem}
+						onSelectViralItem={onSelectViralItem}
+					/>
+				))}
+			</Box>
+		</Drawer>
+	)
 }
 
 interface IViralItemsList {
-  title: string
-  selectedVirals: AvailableViral[]
-  viralItems: AvailableViral[]
-  onSelectViralItem: (viralItem: AvailableViral) => void
-  onRemoveViralItem: (viralItem: AvailableViral) => void
+	title: string
+	selectedVirals: AvailableViral[]
+	viralItems: AvailableViral[]
+	onSelectViralItem: (viralItem: AvailableViral) => void
+	onRemoveViralItem: (viralItem: AvailableViral) => void
 }
 
 const ViralItemsList: React.FC<IViralItemsList> = ({
-  title,
-  viralItems,
-  onSelectViralItem,
-  onRemoveViralItem,
-  selectedVirals
+	title,
+	viralItems,
+	selectedVirals,
+	onRemoveViralItem,
+	onSelectViralItem,
 }) => {
-  const isExist = useCallback(
-    (viralItem: AvailableViral): boolean => {
-      const isExistElement = selectedVirals.find((el) => el.name === viralItem.name)
-      return isExistElement !== undefined
-    },
-    [selectedVirals]
-  )
+	const isExist = useCallback(
+		(viralItem: AvailableViral): boolean => {
+			const isExistElement = selectedVirals.find(
+				(el) => el.name === viralItem.name
+			)
+			return isExistElement !== undefined
+		},
+		[selectedVirals]
+	)
 
-  const onSelectItem = useCallback(
-    (viralItem: AvailableViral) => {
-      if (isExist(viralItem)) onRemoveViralItem(viralItem)
-      else onSelectViralItem(viralItem)
-    },
-    [selectedVirals, onSelectViralItem, onRemoveViralItem]
-  )
+	const onSelectItem = useCallback(
+		(viralItem: AvailableViral) => {
+			const isExistElement = ViralDataStore.Instance.allVirals.find(
+				(el) => el.name === viralItem.name
+			)
+			if (isExistElement === undefined) {
+				ViralDataStore.Instance.addViral(viralItem)
+				onSelectViralItem(viralItem)
+			} else {
+				ViralDataStore.Instance.removeViral(viralItem.name)
+				onRemoveViralItem(viralItem)
+			}
+		},
+		[onRemoveViralItem, onSelectViralItem]
+	)
 
-  return (
-    <List
-      sx={{ width: '100%', maxWidth: drawerWidth }}
-      subheader={<ListSubheader style={{ fontWeight: 'bold' }}>{title}</ListSubheader>}
-    >
-      {viralItems.map((viralItem) => (
-        <ViralListItem
-          key={uuidv4()}
-          isChecked={isExist(viralItem)}
-          name={viralItem.name}
-          onSelect={() => onSelectItem(viralItem)}
-        />
-      ))}
-    </List>
-  )
+	return (
+		<List
+			sx={{ width: '100%', maxWidth: drawerWidth }}
+			subheader={
+				<ListSubheader style={{ fontWeight: 'bold' }}>
+					{title}
+				</ListSubheader>
+			}>
+			{viralItems.map((viralItem) => (
+				<ViralListItem
+					key={uuidv4()}
+					isChecked={isExist(viralItem)}
+					name={viralItem.name}
+					onSelect={() => onSelectItem(viralItem)}
+				/>
+			))}
+		</List>
+	)
 }
